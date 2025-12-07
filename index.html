@@ -1,0 +1,563 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elektronika CZ – nové a bazarové telefony</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; background:#f4f4f4; color:#222; }
+
+    /* HLAVIČKA */
+    header {
+      background:#111827;
+      color:#fff;
+      padding:15px 10px;
+    }
+    .header-inner {
+      max-width:1100px;
+      margin:0 auto;
+    }
+    .logo {
+      font-size:1.8rem;
+      font-weight:bold;
+      text-align:center;
+      margin-bottom:10px;
+    }
+    .logo span { color:#fbbf24; }
+
+    nav {
+      display:flex;
+      justify-content:center;
+      gap:15px;
+      flex-wrap:wrap;
+      font-size:0.95rem;
+      margin-bottom:8px;
+    }
+    nav a {
+      color:#e5e7eb;
+      text-decoration:none;
+    }
+    nav a:hover {
+      text-decoration:underline;
+    }
+
+    .cart-top {
+      text-align:center;
+      font-size:0.95rem;
+      font-weight:bold;
+    }
+
+    /* NADPISY SEKCI */
+    h2 {
+      text-align:center;
+      margin-top:25px;
+      font-size:1.3rem;
+    }
+    .section-note {
+      text-align:center;
+      color:#666;
+      font-size:0.9rem;
+      margin-top:-8px;
+      margin-bottom:10px;
+    }
+
+    /* PRODUKTY */
+    .products {
+      display:flex;
+      gap:20px;
+      flex-wrap:wrap;
+      justify-content:center;
+      padding:15px;
+      max-width:1100px;
+      margin:0 auto;
+    }
+    .product {
+      background:white;
+      padding:12px;
+      width:230px;
+      border-radius:8px;
+      box-shadow:0 0 8px #d1d5db;
+      position:relative;
+      display:flex;
+      flex-direction:column;
+      gap:6px;
+    }
+    .product img {
+      width:100%;
+      height:150px;
+      object-fit:cover;
+      border-radius:6px;
+      background:#e5e7eb;
+    }
+    .tag {
+      display:inline-block;
+      background:#e5e7eb;
+      padding:2px 7px;
+      border-radius:10px;
+      font-size:0.75rem;
+      margin-top:4px;
+    }
+    .badge-sale {
+      position:absolute;
+      top:8px;
+      left:-4px;
+      background:#e11d48;
+      color:#fff;
+      padding:2px 7px;
+      font-size:0.7rem;
+      border-radius:0 4px 4px 0;
+      font-weight:bold;
+    }
+    .badge-bazar {
+      position:absolute;
+      top:8px;
+      right:-4px;
+      background:#1d4ed8;
+      color:#fff;
+      padding:2px 7px;
+      font-size:0.7rem;
+      border-radius:4px 0 0 4px;
+      font-weight:bold;
+    }
+    .price-row {
+      font-size:0.95rem;
+    }
+    .old-price {
+      text-decoration:line-through;
+      color:#9ca3af;
+      margin-right:4px;
+      font-size:0.85rem;
+    }
+    .new-price {
+      color:#e11d48;
+      font-weight:bold;
+    }
+    .price-plain {
+      font-weight:bold;
+    }
+    .info {
+      font-size:0.8rem;
+      color:#4b5563;
+      line-height:1.3;
+    }
+    .info strong { color:#111827; }
+
+    button {
+      margin-top:6px;
+      padding:7px 10px;
+      background:#111827;
+      color:white;
+      border:none;
+      border-radius:5px;
+      cursor:pointer;
+      font-size:0.9rem;
+      align-self:flex-start;
+    }
+    button:hover { background:#1f2937; }
+
+    /* KOŠÍK */
+    #cart-box {
+      background:white;
+      margin:20px auto 40px;
+      padding:15px;
+      width:90%;
+      max-width:650px;
+      border-radius:8px;
+      box-shadow:0 0 8px #d1d5db;
+    }
+    #cart-box h2 {
+      margin-top:0;
+      font-size:1.2rem;
+    }
+    #cart-items {
+      list-style:none;
+      padding:0;
+      margin:10px 0;
+    }
+    #cart-items li {
+      display:flex;
+      justify-content:space-between;
+      padding:4px 0;
+      border-bottom:1px solid #e5e7eb;
+      font-size:0.9rem;
+    }
+    #cart-total {
+      font-weight:bold;
+    }
+    .cart-empty-text {
+      font-size:0.85rem;
+      color:#6b7280;
+    }
+    .cart-actions {
+      text-align:right;
+      margin-top:8px;
+    }
+    .cart-actions button {
+      background:#b91c1c;
+    }
+    .cart-actions button:hover {
+      background:#dc2626;
+    }
+
+    footer {
+      background:#111827;
+      color:#9ca3af;
+      text-align:center;
+      padding:10px;
+      font-size:0.8rem;
+    }
+
+    @media (max-width: 768px) {
+      .product { width:100%; max-width:340px; }
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <div class="header-inner">
+    <div class="logo">Elektronika <span>CZ</span></div>
+    <nav>
+      <a href="#mobily">Mobilní telefony</a>
+      <a href="#laptopy">Laptopy</a>
+      <a href="#tablety">Tablety</a>
+      <a href="#prislusenstvi">Příslušenství</a>
+      <a href="#kosik">Košík</a>
+    </nav>
+    <div class="cart-top">
+      🛒 Košík: <span id="cart-count">0</span> ks
+    </div>
+  </div>
+</header>
+
+<!-- MOBILNÍ TELEFONY – NOVÉ IPHONY 14+ A DALŠÍ -->
+<h2 id="mobily">Mobilní telefony – nové</h2>
+<p class="section-note">Novější modely za přijatelné ceny. Vhodné jako hlavní telefon na několik let.</p>
+
+<div class="products">
+  <!-- iPhone 17 -->
+  <div class="product">
+    <span class="badge-sale">TOP nabídka</span>
+    <img src="https://via.placeholder.com/220x150?text=iPhone+17" alt="iPhone 17">
+    <h3>iPhone 17 128 GB</h3>
+    <div class="price-row">
+      <span class="old-price">29 990 Kč</span>
+      <span class="new-price">26 490 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Nový kus.</strong><br>
+      Výkonný procesor, kvalitní fotoaparát, dlouhá podpora aktualizací. Ideální pro náročnější uživatele.
+      <br><strong>Dostupnost:</strong> skladem, odeslání do 24 hodin.
+    </div>
+    <button onclick="addToCart('iPhone 17 128 GB',26490)">Přidat do košíku</button>
+  </div>
+
+  <!-- iPhone 16 -->
+  <div class="product">
+    <img src="https://via.placeholder.com/220x150?text=iPhone+16" alt="iPhone 16">
+    <h3>iPhone 16 128 GB</h3>
+    <div class="price-row">
+      <span class="old-price">24 990 Kč</span>
+      <span class="new-price">21 990 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Nový kus.</strong><br>
+      Skvělý poměr cena/výkon – novější generace, ale levnější než nejnovější model.
+      <br><strong>Dostupnost:</strong> skladem, možnost osobního odběru.
+    </div>
+    <button onclick="addToCart('iPhone 16 128 GB',21990)">Přidat do košíku</button>
+  </div>
+
+  <!-- iPhone 15 -->
+  <div class="product">
+    <img src="https://via.placeholder.com/220x150?text=iPhone+15" alt="iPhone 15">
+    <h3>iPhone 15 128 GB</h3>
+    <div class="price-row">
+      <span class="old-price">19 990 Kč</span>
+      <span class="new-price">16 990 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Nový kus.</strong><br>
+      Vhodný pro většinu uživatelů – dobrý foťák, výkon i výdrž baterie.
+      <br><strong>Dostupnost:</strong> skladem, možnost zaslání na dobírku.
+    </div>
+    <button onclick="addToCart('iPhone 15 128 GB',16990)">Přidat do košíku</button>
+  </div>
+
+  <!-- iPhone 14 -->
+  <div class="product">
+    <img src="https://via.placeholder.com/220x150?text=iPhone+14" alt="iPhone 14">
+    <h3>iPhone 14 128 GB</h3>
+    <div class="price-row">
+      <span class="old-price">17 490 Kč</span>
+      <span class="new-price">14 990 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Nový / zánovní kus.</strong><br>
+      Stále velmi výkonný model, vhodný pro každodenní používání, hry i focení.
+      <br><strong>Dostupnost:</strong> omezené množství, doporučujeme rezervaci.
+    </div>
+    <button onclick="addToCart('iPhone 14 128 GB',14990)">Přidat do košíku</button>
+  </div>
+
+  <!-- Samsung S24 -->
+  <div class="product">
+    <img src="https://via.placeholder.com/220x150?text=Samsung+S24" alt="Samsung Galaxy S24">
+    <h3>Samsung Galaxy S24 128 GB</h3>
+    <div class="price-row">
+      <span class="old-price">19 990 Kč</span>
+      <span class="new-price">17 490 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Nový kus.</strong><br>
+      Špičkový displej, rychlý chod, výkonný fotoaparát. Ideální pro Android uživatele.
+      <br><strong>Dostupnost:</strong> skladem, odeslání do 24 hodin.
+    </div>
+    <button onclick="addToCart('Samsung Galaxy S24 128 GB',17490)">Přidat do košíku</button>
+  </div>
+
+  <!-- Xiaomi 14 -->
+  <div class="product">
+    <img src="https://via.placeholder.com/220x150?text=Xiaomi+14" alt="Xiaomi 14">
+    <h3>Xiaomi 14</h3>
+    <div class="price-row">
+      <span class="old-price">13 990 Kč</span>
+      <span class="new-price">11 990 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Nový kus.</strong><br>
+      Výborný poměr cena / výkon – rychlý systém, dobrý foťák, velká baterie.
+      <br><strong>Dostupnost:</strong> skladem, doprava po celé ČR.
+    </div>
+    <button onclick="addToCart('Xiaomi 14',11990)">Přidat do košíku</button>
+  </div>
+</div>
+
+<!-- BAZAROVÉ MOBILY -->
+<h2>Bazar – levnější iPhone a další</h2>
+<p class="section-note">Starší modely se slevou – ideální jako první smartphone nebo druhý telefon.</p>
+
+<div class="products">
+  <!-- iPhone 13 bazar -->
+  <div class="product">
+    <span class="badge-bazar">Bazar</span>
+    <img src="https://via.placeholder.com/220x150?text=iPhone+13+Bazar" alt="iPhone 13 bazar">
+    <h3>iPhone 13 128 GB – bazar</h3>
+    <div class="price-row">
+      <span class="old-price">9 490 Kč</span>
+      <span class="new-price">7 490 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Stav: velmi dobrý.</strong><br>
+      Menší kosmetické oděrky, plně funkční. Vhodný pro někoho, kdo chce ušetřit oproti novému.
+      <br><strong>Dostupnost:</strong> skladem, možnost 14denního vyzkoušení.
+    </div>
+    <button onclick="addToCart('iPhone 13 128 GB (bazar)',7490)">Přidat do košíku</button>
+  </div>
+
+  <!-- iPhone 12 bazar -->
+  <div class="product">
+    <span class="badge-bazar">Bazar</span>
+    <img src="https://via.placeholder.com/220x150?text=iPhone+12+Bazar" alt="iPhone 12 bazar">
+    <h3>iPhone 12 128 GB – bazar</h3>
+    <div class="price-row">
+      <span class="old-price">7 290 Kč</span>
+      <span class="new-price">5 990 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Stav: dobrý.</strong><br>
+      Viditelné drobné oděrky, baterie v dobré kondici. Rozumná volba pro levnější iPhone.
+      <br><strong>Dostupnost:</strong> ihned k odběru.
+    </div>
+    <button onclick="addToCart('iPhone 12 128 GB (bazar)',5990)">Přidat do košíku</button>
+  </div>
+
+  <!-- iPhone 11 bazar -->
+  <div class="product">
+    <span class="badge-bazar">Bazar</span>
+    <img src="https://via.placeholder.com/220x150?text=iPhone+11+Bazar" alt="iPhone 11 bazar">
+    <h3>iPhone 11 128 GB – bazar</h3>
+    <div class="price-row">
+      <span class="old-price">5 690 Kč</span>
+      <span class="new-price">4 490 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Stav: použitý.</strong><br>
+      Vhodný jako první iPhone nebo mobil pro dítě. Stále slušný výkon.
+      <br><strong>Dostupnost:</strong> skladem.
+    </div>
+    <button onclick="addToCart('iPhone 11 128 GB (bazar)',4490)">Přidat do košíku</button>
+  </div>
+</div>
+
+<!-- LAPTOPY -->
+<h2 id="laptopy">Laptopy</h2>
+<p class="section-note">Základní nabídka – později můžeme rozšířit o herní a bazarové notebooky.</p>
+
+<div class="products">
+  <div class="product">
+    <img src="https://via.placeholder.com/220x150?text=Kancelarsky+notebook" alt="Kancelářský notebook">
+    <h3>Lenovo ThinkPad – kancelářský</h3>
+    <div class="price-row">
+      <span class="price-plain">15 990 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Stav: zánovní.</strong><br>
+      Vhodný na práci, Office, maily, internet. Spolehlivý stroj na několik let.
+      <br><strong>Dostupnost:</strong> skladem.
+    </div>
+    <button onclick="addToCart('Lenovo ThinkPad',15990)">Přidat do košíku</button>
+  </div>
+
+  <div class="product">
+    <img src="https://via.placeholder.com/220x150?text=Herni+notebook" alt="Herní notebook">
+    <h3>Herní notebook – RTX grafika</h3>
+    <div class="price-row">
+      <span class="price-plain">24 990 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Stav: nový.</strong><br>
+      Vhodný na hry, střih videa a náročnější práci. Výkonná grafika, dostatek RAM.
+      <br><strong>Dostupnost:</strong> na objednávku, dodání 3–5 dní.
+    </div>
+    <button onclick="addToCart('Herní notebook',24990)">Přidat do košíku</button>
+  </div>
+</div>
+
+<!-- TABLETY -->
+<h2 id="tablety">Tablety</h2>
+<p class="section-note">Tablety pro práci, školu i filmy. Vhodné pro celou rodinu.</p>
+
+<div class="products">
+  <div class="product">
+    <img src="https://via.placeholder.com/220x150?text=iPad+Air" alt="iPad Air">
+    <h3>iPad Air 64 GB</h3>
+    <div class="price-row">
+      <span class="price-plain">11 990 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Stav: zánovní.</strong><br>
+      Skvělý tablet na internet, filmy, YouTube a školu.
+      <br><strong>Dostupnost:</strong> skladem.
+    </div>
+    <button onclick="addToCart('iPad Air 64 GB',11990)">Přidat do košíku</button>
+  </div>
+
+  <div class="product">
+    <img src="https://via.placeholder.com/220x150?text=Galaxy+Tab" alt="Samsung Galaxy Tab">
+    <h3>Samsung Galaxy Tab</h3>
+    <div class="price-row">
+      <span class="price-plain">7 990 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Stav: nový.</strong><br>
+      Android tablet pro filmy, hry a jednoduchou práci.
+      <br><strong>Dostupnost:</strong> skladem.
+    </div>
+    <button onclick="addToCart('Samsung Galaxy Tab',7990)">Přidat do košíku</button>
+  </div>
+</div>
+
+<!-- PŘÍSLUŠENSTVÍ -->
+<h2 id="prislusenstvi">Příslušenství</h2>
+<p class="section-note">Sluchátka, nabíječky a ochranné kryty – aby byl mobil připravený hned používat.</p>
+
+<div class="products">
+  <div class="product">
+    <img src="https://via.placeholder.com/220x150?text=Bezdratova+sluchatka" alt="Bezdrátová sluchátka">
+    <h3>Bezdrátová sluchátka</h3>
+    <div class="price-row">
+      <span class="price-plain">799 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Stav: nové.</strong><br>
+      Vhodné na poslech hudby, volání, sport. Kompatibilní s Android i iOS.
+      <br><strong>Dostupnost:</strong> skladem.
+    </div>
+    <button onclick="addToCart('Bezdrátová sluchátka',799)">Přidat do košíku</button>
+  </div>
+
+  <div class="product">
+    <img src="https://via.placeholder.com/220x150?text=Nabijecka+USB-C" alt="Nabíječka USB-C">
+    <h3>Nabíječka USB-C 20W</h3>
+    <div class="price-row">
+      <span class="price-plain">399 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Stav: nová.</strong><br>
+      Rychlé nabíjení, vhodné pro většinu novějších telefonů.
+      <br><strong>Dostupnost:</strong> skladem.
+    </div>
+    <button onclick="addToCart('Nabíječka USB-C 20W',399)">Přidat do košíku</button>
+  </div>
+
+  <div class="product">
+    <img src="https://via.placeholder.com/220x150?text=Ochranny+kryt" alt="Ochranný kryt">
+    <h3>Ochranný kryt na iPhone</h3>
+    <div class="price-row">
+      <span class="price-plain">299 Kč</span>
+    </div>
+    <div class="info">
+      <strong>Stav: nový.</strong><br>
+      Průhledný kryt, ochrání záda i rohy telefonu.
+      <br><strong>Dostupnost:</strong> různé modely skladem.
+    </div>
+    <button onclick="addToCart('Ochranný kryt na iPhone',299)">Přidat do košíku</button>
+  </div>
+</div>
+
+<!-- KOŠÍK -->
+<div id="kosik"></div>
+<div id="cart-box">
+  <h2>Váš košík</h2>
+  <p class="cart-empty-text" id="cart-empty-text">Košík je prázdný. Přidej si něco výhodného. 🙂</p>
+  <ul id="cart-items"></ul>
+  <p><strong>Celkem: <span id="cart-total">0 Kč</span></strong></p>
+  <div class="cart-actions">
+    <button onclick="clearCart()">Vymazat košík</button>
+  </div>
+</div>
+
+<footer>
+  &copy; 2025 Elektronika CZ – ukázkový e-shop. Ceny a fotky jsou ilustrační.
+</footer>
+
+<script>
+  var cart = [];
+
+  function addToCart(name, price) {
+    cart.push({name:name, price:price});
+    renderCart();
+  }
+
+  function clearCart() {
+    cart = [];
+    renderCart();
+  }
+
+  function renderCart() {
+    var list = document.getElementById("cart-items");
+    var total = document.getElementById("cart-total");
+    var count = document.getElementById("cart-count");
+    var emptyText = document.getElementById("cart-empty-text");
+
+    list.innerHTML = "";
+    var sum = 0;
+
+    cart.forEach(function(item) {
+      sum += item.price;
+      var li = document.createElement("li");
+      li.innerHTML = item.name + " – " + item.price.toLocaleString("cs-CZ") + " Kč";
+      list.appendChild(li);
+    });
+
+    total.innerHTML = sum.toLocaleString("cs-CZ") + " Kč";
+    count.innerHTML = cart.length;
+
+    emptyText.style.display = cart.length === 0 ? "block" : "none";
+  }
+</script>
+
+</body>
+</html>
