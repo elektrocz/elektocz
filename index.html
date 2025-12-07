@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elektronika CZ</title>
+  <style>
+    body { font-family: Arial; margin:0; background:#f4f4f4; }
+    header { background:#333; color:#fff; padding:15px; text-align:center; }
+    nav a { color:white; margin:0 10px; text-decoration:none; }
+    .products { display:flex; gap:20px; flex-wrap:wrap; justify-content:center; padding:20px; }
+    .product { background:white; padding:15px; width:200px; border-radius:8px; text-align:center; box-shadow:0 0 10px #ccc; }
+    .product img { width:100%; }
+    #cart-box { background:white; margin:20px auto; padding:15px; width:90%; max-width:500px; border-radius:8px; box-shadow:0 0 10px #ccc; }
+    #cart-items li { display:flex; justify-content:space-between; padding:5px 0; border-bottom:1px solid #eee; }
+    button { padding:10px; background:#333; color:white; border:none; border-radius:5px; cursor:pointer; }
+    button:hover { background:#555; }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Elektronika CZ</h1>
+  <nav>
+    <a href="#telefony">Telefony</a>
+    <a href="#laptopy">Laptopy</a>
+    <a href="#tablety">Tablety</a>
+  </nav>
+  <p>🛒 Košík: <span id="cart-count">0</span> ks</p>
+</header>
+
+<h2 style="text-align:center; margin-top:20px;">Telefony</h2>
+<div id="telefony" class="products">
+  <div class="product">
+    <img src="https://via.placeholder.com/200x150">
+    <h3>Samsung S23</h3>
+    <p>15 000 Kč</p>
+    <button onclick="addToCart('Samsung S23',15000)">Přidat do košíku</button>
+  </div>
+  <div class="product">
+    <img src="https://via.placeholder.com/200x150">
+    <h3>iPhone 15</h3>
+    <p>25 000 Kč</p>
+    <button onclick="addToCart('iPhone 15',25000)">Přidat do košíku</button>
+  </div>
+</div>
+
+<h2 style="text-align:center;">Laptopy</h2>
+<div id="laptopy" class="products">
+  <div class="product">
+    <img src="https://via.placeholder.com/200x150">
+    <h3>Lenovo ThinkPad</h3>
+    <p>22 000 Kč</p>
+    <button onclick="addToCart('Lenovo ThinkPad',22000)">Přidat do košíku</button>
+  </div>
+  <div class="product">
+    <img src="https://via.placeholder.com/200x150">
+    <h3>MacBook Pro</h3>
+    <p>40 000 Kč</p>
+    <button onclick="addToCart('MacBook Pro',40000)">Přidat do košíku</button>
+  </div>
+</div>
+
+<h2 style="text-align:center;">Tablety</h2>
+<div id="tablety" class="products">
+  <div class="product">
+    <img src="https://via.placeholder.com/200x150">
+    <h3>iPad Air</h3>
+    <p>18 000 Kč</p>
+    <button onclick="addToCart('iPad Air',18000)">Přidat do košíku</button>
+  </div>
+  <div class="product">
+    <img src="https://via.placeholder.com/200x150">
+    <h3>Samsung Tab</h3>
+    <p>12 000 Kč</p>
+    <button onclick="addToCart('Samsung Tab',12000)">Přidat do košíku</button>
+  </div>
+</div>
+
+<div id="cart-box">
+  <h2>Váš košík</h2>
+  <ul id="cart-items"></ul>
+  <p><strong>Celkem: <span id="cart-total">0 Kč</span></strong></p>
+  <button onclick="clearCart()">Vymazat košík</button>
+</div>
+
+<script>
+  let cart = [];
+
+  function addToCart(name, price) {
+    cart.push({name:name, price:price});
+    renderCart();
+  }
+
+  function clearCart() {
+    cart = [];
+    renderCart();
+  }
+
+  function renderCart() {
+    let list = document.getElementById("cart-items");
+    let total = document.getElementById("cart-total");
+    let count = document.getElementById("cart-count");
+
+    list.innerHTML = "";
+    let sum = 0;
+
+    cart.forEach(item => {
+      sum += item.price;
+      let li = document.createElement("li");
+      li.innerHTML = item.name + " – " + item.price.toLocaleString() + " Kč";
+      list.appendChild(li);
+    });
+
+    total.innerHTML = sum.toLocaleString() + " Kč";
+    count.innerHTML = cart.length;
+  }
+</script>
+
+</body>
+</html>
