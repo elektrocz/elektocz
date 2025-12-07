@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elektronika CZ – Vánoční akce</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin:0; background:#f4f4f4; }
+    header { background:#333; color:#fff; padding:15px; text-align:center; }
+    nav a { color:white; margin:0 10px; text-decoration:none; }
+    nav a:hover { text-decoration:underline; }
+
+    h2 { text-align:center; margin-top:25px; }
+
+    .section-note {
+      text-align:center;
+      color:#666;
+      font-size:0.9rem;
+      margin-top:-10px;
+      margin-bottom:10px;
+    }
+
+    .products {
+      display:flex;
+      gap:20px;
+      flex-wrap:wrap;
+      justify-content:center;
+      padding:20px;
+    }
+
+    .product {
+      background:white;
+      padding:15px;
+      width:220px;
+      border-radius:8px;
+      text-align:center;
+      box-shadow:0 0 10px #ccc;
+      position:relative;
+    }
+
+    .product img { width:100%; border-radius:6px; }
+
+    .tag {
+      display:inline-block;
+      background:#eee;
+      padding:3px 7px;
+      border-radius:10px;
+      font-size:0.8rem;
+      margin-bottom:5px;
+    }
+
+    .badge-sale {
+      position:absolute;
+      top:10px;
+      left:-5px;
+      background:#e63946;
+      color:#fff;
+      padding:3px 8px;
+      font-size:0.75rem;
+      border-radius:0 5px 5px 0;
+    }
+
+    .price { font-weight:bold; margin:5px 0; }
+
+    .old-price {
+      text-decoration:line-through;
+      color:#999;
+      font-size:0.9rem;
+      margin-right:5px;
+    }
+
+    .new-price {
+      color:#e63946;
+      font-weight:bold;
+    }
+
+    .xmas-label {
+      font-size:0.8rem;
+      color:#2a9d8f;
+      margin-bottom:5px;
+    }
+
+    button {
+      padding:10px;
+      background:#333;
+      color:white;
+      border:none;
+      border-radius:5px;
+      cursor:pointer;
+      margin-top:8px;
+    }
+
+    button:hover { background:#555; }
+
+    /* Košík box */
+    #cart-box {
+      background:white;
+      margin:20px auto 40px;
+      padding:15px;
+      width:90%;
+      max-width:600px;
+      border-radius:8px;
+      box-shadow:0 0 10px #ccc;
+    }
+
+    #cart-items {
+      list-style:none;
+      padding:0;
+      margin:10px 0;
+    }
+
+    #cart-items li {
+      display:flex;
+      justify-content:space-between;
+      padding:5px 0;
+      border-bottom:1px solid #eee;
+      font-size:0.95rem;
+    }
+
+    #cart-total {
+      font-weight:bold;
+    }
+
+    .cart-header-info {
+      margin:0;
+      font-size:0.9rem;
+    }
+
+    .cart-top-line {
+      margin-top:5px;
+      font-weight:bold;
+    }
+
+    footer {
+      background:#333;
+      color:#fff;
+      text-align:center;
+      padding:10px;
+      font-size:0.85rem;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Elektronika CZ – Vánoční slevy 🎄</h1>
+  <nav>
+    <a href="#telefony">Telefony</a>
+    <a href="#laptopy">Laptopy</a>
+    <a href="#tablety">Tablety</a>
+  </nav>
+  <p class="cart-header-info">
+    Vánoční akce – vybrané iPhony se slevou až 40 %, Samsung a Xiaomi za speciální ceny.
+  </p>
+  <p class="cart-top-line">
+    🛒 Košík: <span id="cart-count">0</span> ks
+  </p>
+</header>
+
+<!-- TELEFONY – iPhone, Samsung, Xiaomi -->
+<h2 id="telefony">Mobilní telefony</h2>
+<p class="section-note">Nové modely s vánoční slevou – ideální dárky pod stromeček 🎁</p>
+
+<div class="products">
+  <!-- iPhone 17 a výš -->
+  <div class="product">
+    <span class="tag">iPhone 17 Pro</span>
+    <span class="badge-sale">Novinka</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>iPhone 17 Pro 256 GB</h3>
+    <p class="xmas-label">Vánoční cena 🎄</p>
+    <p class="price">34 990 Kč</p>
+    <button onclick="addToCart('iPhone 17 Pro 256 GB',34990)">Přidat do košíku</button>
+  </div>
+
+  <div class="product">
+    <span class="tag">iPhone 17</span>
+    <span class="badge-sale">Novinka</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>iPhone 17 128 GB</h3>
+    <p class="xmas-label">Vánoční cena 🎄</p>
+    <p class="price">29 990 Kč</p>
+    <button onclick="addToCart('iPhone 17 128 GB',29990)">Přidat do košíku</button>
+  </div>
+
+  <!-- iPhone 16 a výš -->
+  <div class="product">
+    <span class="tag">iPhone 16 Pro</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>iPhone 16 Pro 256 GB</h3>
+    <p class="xmas-label">Vánoční cena 🎄</p>
+    <p class="price">28 990 Kč</p>
+    <button onclick="addToCart('iPhone 16 Pro 256 GB',28990)">Přidat do košíku</button>
+  </div>
+
+  <div class="product">
+    <span class="tag">iPhone 16</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>iPhone 16 128 GB</h3>
+    <p class="xmas-label">Vánoční cena 🎄</p>
+    <p class="price">24 990 Kč</p>
+    <button onclick="addToCart('iPhone 16 128 GB',24990)">Přidat do košíku</button>
+  </div>
+
+  <!-- iPhone 15 a výš -->
+  <div class="product">
+    <span class="tag">iPhone 15 Pro</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>iPhone 15 Pro 256 GB</h3>
+    <p class="xmas-label">Vánoční cena 🎄</p>
+    <p class="price">23 990 Kč</p>
+    <button onclick="addToCart('iPhone 15 Pro 256 GB',23990)">Přidat do košíku</button>
+  </div>
+
+  <div class="product">
+    <span class="tag">iPhone 15</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>iPhone 15 128 GB</h3>
+    <p class="xmas-label">Vánoční cena 🎄</p>
+    <p class="price">19 990 Kč</p>
+    <button onclick="addToCart('iPhone 15 128 GB',19990)">Přidat do košíku</button>
+  </div>
+
+  <!-- iPhone 14 a výš -->
+  <div class="product">
+    <span class="tag">iPhone 14 Pro</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>iPhone 14 Pro 256 GB</h3>
+    <p class="xmas-label">Vánoční cena 🎄</p>
+    <p class="price">19 490 Kč</p>
+    <button onclick="addToCart('iPhone 14 Pro 256 GB',19490)">Přidat do košíku</button>
+  </div>
+
+  <div class="product">
+    <span class="tag">iPhone 14</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>iPhone 14 128 GB</h3>
+    <p class="xmas-label">Vánoční cena 🎄</p>
+    <p class="price">16 990 Kč</p>
+    <button onclick="addToCart('iPhone 14 128 GB',16990)">Přidat do košíku</button>
+  </div>
+
+  <!-- iPhone 13 / 12 / 11 se slevou -40 % -->
+  <div class="product">
+    <span class="tag">iPhone 13</span>
+    <span class="badge-sale">-40 %</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>iPhone 13 128 GB</h3>
+    <p>
+      <span class="old-price">15 990 Kč</span>
+      <span class="new-price">9 590 Kč (-40 %)</span>
+    </p>
+    <button onclick="addToCart('iPhone 13 128 GB',9590)">Přidat do košíku</button>
+  </div>
+
+  <div class="product">
+    <span class="tag">iPhone 12</span>
+    <span class="badge-sale">-40 %</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>iPhone 12 128 GB</h3>
+    <p>
+      <span class="old-price">13 990 Kč</span>
+      <span class="new-price">8 390 Kč (-40 %)</span>
+    </p>
+    <button onclick="addToCart('iPhone 12 128 GB',8390)">Přidat do košíku</button>
+  </div>
+
+  <div class="product">
+    <span class="tag">iPhone 11</span>
+    <span class="badge-sale">-40 %</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>iPhone 11 128 GB</h3>
+    <p>
+      <span class="old-price">10 990 Kč</span>
+      <span class="new-price">6 590 Kč (-40 %)</span>
+    </p>
+    <button onclick="addToCart('iPhone 11 128 GB',6590)">Přidat do košíku</button>
+  </div>
+
+  <!-- Samsung – novější modely, levnější na Vánoce -->
+  <div class="product">
+    <span class="tag">Samsung Galaxy S24</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>Samsung Galaxy S24</h3>
+    <p class="xmas-label">Vánoční sleva 🎄</p>
+    <p class="price">18 990 Kč</p>
+    <button onclick="addToCart('Samsung Galaxy S24',18990)">Přidat do košíku</button>
+  </div>
+
+  <div class="product">
+    <span class="tag">Samsung Galaxy S24 Ultra</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>Samsung Galaxy S24 Ultra</h3>
+    <p class="xmas-label">Vánoční sleva 🎄</p>
+    <p class="price">25 990 Kč</p>
+    <button onclick="addToCart('Samsung Galaxy S24 Ultra',25990)">Přidat do košíku</button>
+  </div>
+
+  <div class="product">
+    <span class="tag">Samsung A55</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>Samsung Galaxy A55</h3>
+    <p class="xmas-label">Speciální vánoční cena 🎁</p>
+    <p class="price">8 990 Kč</p>
+    <button onclick="addToCart('Samsung Galaxy A55',8990)">Přidat do košíku</button>
+  </div>
+
+  <!-- Xiaomi – novější modely, levnější kvůli Vánocům -->
+  <div class="product">
+    <span class="tag">Xiaomi 14</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>Xiaomi 14</h3>
+    <p class="xmas-label">Vánoční cena 🎄</p>
+    <p class="price">13 990 Kč</p>
+    <button onclick="addToCart('Xiaomi 14',13990)">Přidat do košíku</button>
+  </div>
+
+  <div class="product">
+    <span class="tag">Xiaomi Redmi Note 13</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>Redmi Note 13</h3>
+    <p class="xmas-label">Levnější kvůli Vánocům 🎄</p>
+    <p class="price">6 490 Kč</p>
+    <button onclick="addToCart('Redmi Note 13',6490)">Přidat do košíku</button>
+  </div>
+
+</div>
+
+<!-- LAPTOPY (zatím jednoduché, později rozšíříme) -->
+<h2 id="laptopy">Laptopy</h2>
+<div class="products">
+  <div class="product">
+    <span class="tag">Pracovní</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>Lenovo ThinkPad</h3>
+    <p class="price">22 000 Kč</p>
+    <button onclick="addToCart('Lenovo ThinkPad',22000)">Přidat do košíku</button>
+  </div>
+  <div class="product">
+    <span class="tag">Herní</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>Gaming HP Omen</h3>
+    <p class="price">32 990 Kč</p>
+    <button onclick="addToCart('Gaming HP Omen',32990)">Přidat do košíku</button>
+  </div>
+</div>
+
+<!-- TABLETY (zatím jednoduché) -->
+<h2 id="tablety">Tablety</h2>
+<div class="products">
+  <div class="product">
+    <span class="tag">Apple</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>iPad Air</h3>
+    <p class="price">18 000 Kč</p>
+    <button onclick="addToCart('iPad Air',18000)">Přidat do košíku</button>
+  </div>
+  <div class="product">
+    <span class="tag">Samsung</span>
+    <img src="https://via.placeholder.com/220x150">
+    <h3>Samsung Galaxy Tab</h3>
+    <p class="price">12 000 Kč</p>
+    <button onclick="addToCart('Samsung Galaxy Tab',12000)">Přidat do košíku</button>
+  </div>
+</div>
+
+<!-- KOŠÍK -->
+<div id="cart-box">
+  <h2>Váš košík</h2>
+  <ul id="cart-items"></ul>
+  <p><strong>Celkem: <span id="cart-total">0 Kč</span></strong></p>
+  <button onclick="clearCart()">Vymazat košík</button>
+</div>
+
+<footer>
+  &copy; 2025 Elektronika CZ – Vánoční nabídka. Ceny jsou pouze ukázkové.
+</footer>
+
+<script>
+  let cart = [];
+
+  function addToCart(name, price) {
+    cart.push({name:name, price:price});
+    renderCart();
+  }
+
+  function clearCart() {
+    cart = [];
+    renderCart();
+  }
+
+  function renderCart() {
+    let list = document.getElementById("cart-items");
+    let total = document.getElementById("cart-total");
+    let count = document.getElementById("cart-count");
+
+    list.innerHTML = "";
+    let sum = 0;
+
+    cart.forEach(function(item) {
+      sum += item.price;
+      let li = document.createElement("li");
+      li.innerHTML = item.name + " – " + item.price.toLocaleString("cs-CZ") + " Kč";
+      list.appendChild(li);
+    });
+
+    total.innerHTML = sum.toLocaleString("cs-CZ") + " Kč";
+    count.innerHTML = cart.length;
+  }
+</script>
+
+</body>
+</html>
