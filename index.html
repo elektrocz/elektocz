@@ -1,0 +1,735 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <title>Mobilní telefony – Bobby Shop</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: radial-gradient(circle at top, #1f2937, #020617);
+      color: #e5e7eb;
+      min-height: 100vh;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 10;
+      backdrop-filter: blur(16px);
+      background: rgba(15, 23, 42, 0.85);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.2);
+    }
+
+    .top-bar-inner {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-weight: 600;
+      letter-spacing: .03em;
+    }
+
+    .logo-badge {
+      width: 28px;
+      height: 28px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #0ea5e9);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 16px;
+      color: white;
+    }
+
+    .pill {
+      font-size: 12px;
+      padding: 4px 10px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.5);
+      color: #e5e7eb;
+      white-space: nowrap;
+    }
+
+    .container {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 18px 16px 40px;
+    }
+
+    .hero {
+      margin-bottom: 20px;
+    }
+
+    .hero-title {
+      font-size: 26px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .hero-subtitle {
+      font-size: 14px;
+      color: #9ca3af;
+      margin-bottom: 12px;
+    }
+
+    .hero-highlights {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 6px;
+      margin-bottom: 8px;
+    }
+
+    .hero-highlights span {
+      font-size: 11px;
+      padding: 3px 9px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: #d1d5db;
+    }
+
+    .hero-note {
+      font-size: 11px;
+      color: #6b7280;
+    }
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+      gap: 16px;
+      margin-top: 12px;
+    }
+
+    .product-card {
+      background: radial-gradient(circle at top, #111827, #020617);
+      border-radius: 16px;
+      padding: 10px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      box-shadow: 0 18px 40px rgba(15, 23, 42, 0.65);
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      cursor: pointer;
+      transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 24px 55px rgba(15, 23, 42, 0.9);
+      border-color: #22c55e;
+    }
+
+    .product-image-wrapper {
+      border-radius: 12px;
+      overflow: hidden;
+      background: #020617;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .product-image {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+    }
+
+    .product-name {
+      font-size: 15px;
+      font-weight: 600;
+    }
+
+    .product-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: baseline;
+      gap: 8px;
+    }
+
+    .product-price {
+      font-weight: 700;
+      font-size: 15px;
+      color: #22c55e;
+    }
+
+    .product-tag {
+      font-size: 11px;
+      padding: 3px 8px;
+      border-radius: 999px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      color: #9ca3af;
+      white-space: nowrap;
+    }
+
+    .product-bottom-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 8px;
+      margin-top: 4px;
+    }
+
+    .badge-rating {
+      font-size: 11px;
+      color: #facc15;
+    }
+
+    .btn-details {
+      border: none;
+      outline: none;
+      cursor: pointer;
+      font-size: 12px;
+      padding: 6px 10px;
+      border-radius: 999px;
+      background: linear-gradient(135deg, #22c55e, #0ea5e9);
+      color: #0b1120;
+      font-weight: 600;
+      white-space: nowrap;
+    }
+
+    .btn-details:active {
+      transform: scale(0.96);
+    }
+
+    .section-title {
+      font-size: 16px;
+      font-weight: 600;
+      margin-top: 32px;
+      margin-bottom: 8px;
+    }
+
+    .review-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+      font-size: 12px;
+      color: #d1d5db;
+    }
+
+    .review-card {
+      border-radius: 14px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      padding: 10px;
+      background: radial-gradient(circle at top, #020617, #020617);
+    }
+
+    .review-author {
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .review-stars {
+      font-size: 11px;
+      color: #facc15;
+    }
+
+    .review-text {
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .review-footer {
+      font-size: 10px;
+      margin-top: 6px;
+      color: #6b7280;
+    }
+
+    .footer {
+      margin-top: 28px;
+      font-size: 11px;
+      color: #6b7280;
+      border-top: 1px solid rgba(148, 163, 184, 0.25);
+      padding-top: 12px;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .footer span {
+      white-space: nowrap;
+    }
+
+    /* Modal */
+
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 50;
+    }
+
+    .hidden {
+      display: none;
+    }
+
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.88);
+    }
+
+    .modal-content {
+      position: relative;
+      z-index: 10;
+      max-width: 480px;
+      width: 100%;
+      margin: 0 16px;
+      background: radial-gradient(circle at top, #020617, #020617);
+      border-radius: 20px;
+      padding: 18px 16px 16px;
+      border: 1px solid rgba(148, 163, 184, 0.35);
+      box-shadow: 0 24px 70px rgba(0, 0, 0, 0.95);
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 10px;
+      right: 12px;
+      width: 26px;
+      height: 26px;
+      border-radius: 999px;
+      border: 1px solid rgba(148, 163, 184, 0.6);
+      background: rgba(15, 23, 42, 0.9);
+      color: #e5e7eb;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+    }
+
+    .modal-title {
+      font-size: 18px;
+      font-weight: 700;
+      margin-bottom: 4px;
+      padding-right: 36px;
+    }
+
+    .modal-price {
+      font-size: 15px;
+      font-weight: 700;
+      color: #22c55e;
+      margin-bottom: 10px;
+    }
+
+    .modal-specs-title,
+    .modal-reviews-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin: 10px 0 4px;
+    }
+
+    #modal-specs {
+      list-style: none;
+      font-size: 12px;
+      color: #d1d5db;
+      margin-bottom: 4px;
+    }
+
+    #modal-specs li::before {
+      content: "• ";
+      color: #22c55e;
+    }
+
+    #modal-reviews {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      font-size: 12px;
+      color: #9ca3af;
+    }
+
+    .modal-review-item {
+      padding: 6px 8px;
+      border-radius: 10px;
+      background: rgba(15, 23, 42, 0.9);
+      border: 1px solid rgba(55, 65, 81, 0.9);
+    }
+
+    .modal-review-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 11px;
+      margin-bottom: 2px;
+    }
+
+    .modal-review-author {
+      font-weight: 500;
+    }
+
+    .modal-review-stars {
+      color: #facc15;
+    }
+
+    .modal-eta {
+      font-size: 11px;
+      color: #6b7280;
+      margin-top: 8px;
+    }
+
+    @media (min-width: 768px) {
+      .hero-title {
+        font-size: 30px;
+      }
+      .hero-subtitle {
+        font-size: 15px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="logo">
+        <div class="logo-badge">B</div>
+        <span>Bobby Phones</span>
+      </div>
+      <div class="pill">Doručení do 24 h · 2 roky záruka</div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="hero">
+      <h1 class="hero-title">Nejnovější iPhone 14, 15 a další top telefony</h1>
+      <p class="hero-subtitle">
+        Vybrané modely skladem v ČR. Po kliknutí na produkt uvidíš přesné parametry a reálné recenze zákazníků.
+      </p>
+      <div class="hero-highlights">
+        <span>✅ Ověřený prodejce</span>
+        <span>💳 Možnost platby převodem / kartou</span>
+        <span>📦 Odeslání ještě dnes do 16:00</span>
+      </div>
+      <p class="hero-note">
+        Obrázky jsou ukázkové – můžeš je kdykoliv nahradit vlastními fotkami produktů.
+      </p>
+    </section>
+
+    <!-- PRODUKTY – generuje se z JavaScriptu -->
+    <section>
+      <div class="product-grid" id="product-list"></div>
+    </section>
+
+    <!-- Recenze na obchod -->
+    <section>
+      <h2 class="section-title">Recenze na náš obchod</h2>
+      <div class="review-grid">
+        <article class="review-card">
+          <div class="review-author">
+            <span>Martin H.</span>
+            <span class="review-stars">★★★★★</span>
+          </div>
+          <p class="review-text">
+            Telefon přišel hned druhý den, perfektně zabalený. Komunikace přes WhatsApp super rychlá.
+          </p>
+          <p class="review-footer">Ověřený nákup · iPhone 14</p>
+        </article>
+        <article class="review-card">
+          <div class="review-author">
+            <span>Veronika P.</span>
+            <span class="review-stars">★★★★★</span>
+          </div>
+          <p class="review-text">
+            Pomohli mi vybrat mobil podle fotek a výdrže baterky. Jsem spokojená, určitě objednám znovu.
+          </p>
+          <p class="review-footer">Ověřený nákup · Samsung S23</p>
+        </article>
+        <article class="review-card">
+          <div class="review-author">
+            <span>Tomáš R.</span>
+            <span class="review-stars">★★★★☆</span>
+          </div>
+          <p class="review-text">
+            Telefon jako nový, jen menší kosmetické škrábance, ale na to mě předem upozornili.
+          </p>
+          <p class="review-footer">Ověřený nákup · Xiaomi Redmi</p>
+        </article>
+      </div>
+    </section>
+
+    <footer class="footer">
+      <span>© 2025 Bobby Phones</span>
+      <span>Nejedná se o oficiální Apple web – jen ukázkový GitHub web.</span>
+    </footer>
+  </main>
+
+  <!-- MODAL – detail produktu -->
+  <div id="product-modal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Zavřít detail">&times;</button>
+
+      <h2 id="modal-title" class="modal-title">Název telefonu</h2>
+      <p id="modal-price" class="modal-price">Cena</p>
+
+      <h3 class="modal-specs-title">Parametry</h3>
+      <ul id="modal-specs"></ul>
+
+      <h3 class="modal-reviews-title">Recenze zákazníků</h3>
+      <div id="modal-reviews"></div>
+
+      <p class="modal-eta">
+        Dostupnost: skladem · odesíláme do 24 h z českého skladu.
+      </p>
+    </div>
+  </div>
+
+  <script>
+    // TADY NASTAVUJEŠ PRODUKTY (název, cena, obrázek, parametry, recenze)
+    const products = [
+      {
+        id: "iphone14",
+        name: "Apple iPhone 14 128 GB",
+        price: "22 990 Kč",
+        image: "https://via.placeholder.com/600x400?text=iPhone+14",
+        label: "Nejprodávanější",
+        rating: "4.9 · 127 hodnocení",
+        specs: [
+          "Displej 6,1\" OLED, 60 Hz",
+          "Fotoaparát 12 + 12 Mpx, 4K video",
+          "Úložiště 128 GB",
+          "Podpora 5G, eSIM",
+          "Barva: Midnight"
+        ],
+        reviews: [
+          {
+            author: "Karel",
+            stars: 5,
+            text: "Přechod z iPhone 11, rozdíl v baterce a foťáku je brutální. Doporučuji."
+          },
+          {
+            author: "Simona",
+            stars: 5,
+            text: "Rychlé doručení, mobil originál zabalený, žádný fake. Super komunikace."
+          }
+        ]
+      },
+      {
+        id: "iphone15",
+        name: "Apple iPhone 15 128 GB",
+        price: "25 990 Kč",
+        image: "https://via.placeholder.com/600x400?text=iPhone+15",
+        label: "Novinka 2025",
+        rating: "5.0 · 64 hodnocení",
+        specs: [
+          "Displej 6,1\" Super Retina XDR",
+          "USB-C konektor",
+          "Vylepšený noční režim fotoaparátu",
+          "Chip A16 Bionic",
+          "Barva: Blue"
+        ],
+        reviews: [
+          {
+            author: "Lukáš",
+            stars: 5,
+            text: "Koupil jsem přes tuhle stránku, všechno v pohodě, žádné zbytečné kecy."
+          },
+          {
+            author: "Eva",
+            stars: 5,
+            text: "Telefon top, objednávka přes GitHub stránku mě bavila, pěkně udělané :)"
+          }
+        ]
+      },
+      {
+        id: "iphone13",
+        name: "Apple iPhone 13 128 GB",
+        price: "17 990 Kč",
+        image: "https://via.placeholder.com/600x400?text=iPhone+13",
+        label: "Výhodná volba",
+        rating: "4.8 · 213 hodnocení",
+        specs: [
+          "Displej 6,1\" OLED",
+          "Výdrž baterie až 19 h videa",
+          "Čip A15 Bionic",
+          "Úložiště 128 GB",
+          "Barva: Product RED"
+        ],
+        reviews: [
+          {
+            author: "Roman",
+            stars: 5,
+            text: "Za tu cenu úplně stačí, nepotřebuju nejnovější model."
+          },
+          {
+            author: "Nikol",
+            stars: 4,
+            text: "Telefon super, jen jsem čekala lepší nabíjecí adaptér v balení."
+          }
+        ]
+      },
+      {
+        id: "s23",
+        name: "Samsung Galaxy S23 256 GB",
+        price: "21 490 Kč",
+        image: "https://via.placeholder.com/600x400?text=Samsung+S23",
+        label: "Android topka",
+        rating: "4.9 · 88 hodnocení",
+        specs: [
+          "Displej 6,1\" AMOLED, 120 Hz",
+          "Trojitý fotoaparát, 8K video",
+          "Úložiště 256 GB",
+          "Snapdragon 8 Gen 2",
+          "Barva: Phantom Black"
+        ],
+        reviews: [
+          {
+            author: "Patrik",
+            stars: 5,
+            text: "Hladký chod, hry jedou jak nic. Přechod z iOS bez problémů."
+          },
+          {
+            author: "Jana",
+            stars: 5,
+            text: "Foťák fakt pecka, hlavně večer. Rychlé dodání."
+          }
+        ]
+      },
+      {
+        id: "redmi13",
+        name: "Xiaomi Redmi Note 13 Pro",
+        price: "8 990 Kč",
+        image: "https://via.placeholder.com/600x400?text=Redmi+Note+13+Pro",
+        label: "Nejlepší poměr cena/výkon",
+        rating: "4.7 · 172 hodnocení",
+        specs: [
+          "Displej 6,67\" 120 Hz",
+          "Hlavní fotoaparát 200 Mpx",
+          "Rychlé nabíjení 67 W",
+          "Dual SIM",
+          "Barva: Graphite Gray"
+        ],
+        reviews: [
+          {
+            author: "David",
+            stars: 5,
+            text: "Za málo peněz hodně muziky, pro běžné používání ideální."
+          },
+          {
+            author: "Lenka",
+            stars: 4,
+            text: "Jen MIUI je občas přeplácané, ale jinak super."
+          }
+        ]
+      }
+    ];
+
+    const productList = document.getElementById("product-list");
+    const modal = document.getElementById("product-modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalPrice = document.getElementById("modal-price");
+    const modalSpecs = document.getElementById("modal-specs");
+    const modalReviews = document.getElementById("modal-reviews");
+
+    function renderProducts() {
+      products.forEach((product) => {
+        const card = document.createElement("article");
+        card.className = "product-card";
+        card.innerHTML = `
+          <div class="product-image-wrapper">
+            <img class="product-image" src="${product.image}" alt="${product.name}">
+          </div>
+          <h2 class="product-name">${product.name}</h2>
+          <div class="product-meta">
+            <span class="product-price">${product.price}</span>
+            <span class="product-tag">${product.label}</span>
+          </div>
+          <div class="product-bottom-row">
+            <span class="badge-rating">★ ${product.rating}</span>
+            <button class="btn-details" type="button">Zobrazit detaily</button>
+          </div>
+        `;
+
+        card.addEventListener("click", (event) => {
+          // aby klik na kartu i na tlačítko dělaly to samé
+          event.stopPropagation();
+          openProductModal(product);
+        });
+
+        const button = card.querySelector(".btn-details");
+        button.addEventListener("click", (event) => {
+          event.stopPropagation();
+          openProductModal(product);
+        });
+
+        productList.appendChild(card);
+      });
+    }
+
+    function openProductModal(product) {
+      modalTitle.textContent = product.name;
+      modalPrice.textContent = product.price;
+
+      // Parametry
+      modalSpecs.innerHTML = "";
+      product.specs.forEach((spec) => {
+        const li = document.createElement("li");
+        li.textContent = spec;
+        modalSpecs.appendChild(li);
+      });
+
+      // Recenze
+      modalReviews.innerHTML = "";
+      product.reviews.forEach((rev) => {
+        const div = document.createElement("div");
+        div.className = "modal-review-item";
+        div.innerHTML = `
+          <div class="modal-review-header">
+            <span class="modal-review-author">${rev.author}</span>
+            <span class="modal-review-stars">${"★".repeat(rev.stars)}</span>
+          </div>
+          <p>${rev.text}</p>
+        `;
+        modalReviews.appendChild(div);
+      });
+
+      modal.classList.remove("hidden");
+    }
+
+    function closeModal() {
+      modal.classList.add("hidden");
+    }
+
+    // zavření modalu
+    document.querySelector(".modal-close").addEventListener("click", closeModal);
+    document.querySelector(".modal-backdrop").addEventListener("click", closeModal);
+
+    document.addEventListener("keydown", (event) => {
+      if (event.key === "Escape" && !modal.classList.contains("hidden")) {
+        closeModal();
+      }
+    });
+
+    // Start – vykreslení produktů
+    renderProducts();
+  </script>
+</body>
+</html>
