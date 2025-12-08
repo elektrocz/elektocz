@@ -1,0 +1,887 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <title>Elektronika CZ – Mobilní telefony, TV a další</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    /* ---------- základ a reset ---------- */
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f5; /* světlé pozadí */
+      color: #1a1a1a;
+      line-height: 1.4;
+    }
+    a { color: inherit; text-decoration: none; }
+
+    /* ---------- top menu ---------- */
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: #ffffff;
+      border-bottom: 1px solid #d1d5db;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.06);
+    }
+    .top-bar-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 12px;
+    }
+    .logo {
+      font-weight: 700;
+      font-size: 20px;
+    }
+    .menu {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+    .menu a {
+      font-size: 14px;
+      padding: 6px 4px;
+    }
+    .cart {
+      font-size: 14px;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+    .cart svg { width: 18px; height: 18px; }
+
+    /* ---------- hlavní obsah ---------- */
+    .container {
+      max-width: 1200px;
+      margin: 20px auto;
+      padding: 0 16px 40px;
+    }
+    .section-title {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+    .section-subtitle {
+      font-size: 14px;
+      color: #4b5563;
+      margin-bottom: 16px;
+    }
+
+    /* ---------- produktová síť ---------- */
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 16px;
+    }
+    .product-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 14px;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: transform 0.18s ease, box-shadow 0.18s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 6px 18px rgba(0,0,0,0.08);
+      border-color: #3b82f6;
+    }
+    .product-image-wrapper {
+      position: relative;
+      background: #f9fafb;
+      width: 100%;
+      padding-top: 66.666%; /* 3:2 poměr */
+      overflow: hidden;
+    }
+    .product-image {
+      position: absolute;
+      top: 0; left: 0;
+      width: 100%; height: 100%;
+      object-fit: cover;
+    }
+    .product-content {
+      flex: 1;
+      padding: 12px 14px 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+    .product-name {
+      font-size: 15px;
+      font-weight: 600;
+      line-height: 1.2;
+    }
+    .price-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      flex-wrap: wrap;
+    }
+    .old-price {
+      font-size: 13px;
+      text-decoration: line-through;
+      color: #6b7280;
+    }
+    .new-price {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ef4444; /* zvýrazněná sleva */
+    }
+    .tag {
+      font-size: 11px;
+      font-weight: 600;
+      color: #ffffff;
+      background: #ef4444;
+      padding: 2px 8px;
+      border-radius: 999px;
+      white-space: nowrap;
+    }
+    .rating {
+      font-size: 12px;
+      color: #fbbf24; /* zlatá pro hvězdy */
+    }
+    .btn-details, .btn-order {
+      cursor: pointer;
+      padding: 6px 10px;
+      border: none;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 600;
+      text-align: center;
+      transition: background 0.18s ease, transform 0.15s ease;
+    }
+    .btn-details {
+      background: #3b82f6;
+      color: #ffffff;
+    }
+    .btn-details:hover { background: #2563eb; }
+    .btn-order {
+      background: #10b981;
+      color: #ffffff;
+    }
+    .btn-order:hover { background: #059669; }
+
+    /* ---------- modal detail produktu ---------- */
+    .modal {
+      position: fixed;
+      inset: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+    }
+    .hidden { display: none; }
+    .modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0,0,0,0.4);
+    }
+    .modal-content {
+      position: relative;
+      width: 100%;
+      max-width: 520px;
+      max-height: 90vh;
+      overflow-y: auto;
+      background: #ffffff;
+      border-radius: 20px;
+      padding: 20px 18px 24px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 24px 60px rgba(0,0,0,0.15);
+    }
+    .modal-close {
+      position: absolute;
+      top: 12px;
+      right: 14px;
+      width: 28px; height: 28px;
+      border-radius: 999px;
+      background: #f3f4f6;
+      border: none;
+      font-size: 18px;
+      line-height: 1;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-title {
+      font-size: 20px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .modal-price {
+      font-size: 18px;
+      font-weight: 700;
+      color: #ef4444;
+      margin-bottom: 10px;
+    }
+    .modal-section-title {
+      font-size: 14px;
+      font-weight: 600;
+      margin-top: 12px;
+      margin-bottom: 4px;
+    }
+    .spec-list {
+      list-style: none;
+      font-size: 13px;
+      color: #374151;
+      line-height: 1.4;
+      margin: 0;
+      padding-left: 14px;
+    }
+    .spec-list li::before {
+      content: "• ";
+      color: #3b82f6;
+    }
+    .reviews-container {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      font-size: 13px;
+      color: #374151;
+    }
+    .review-item {
+      padding: 8px 10px;
+      border-radius: 12px;
+      background: #f9fafb;
+      border: 1px solid #e5e7eb;
+    }
+    .review-header {
+      display: flex;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-bottom: 4px;
+    }
+    .review-author { font-weight: 500; }
+    .review-stars { color: #fbbf24; }
+    .variant-select {
+      font-size: 13px;
+      padding: 4px 8px;
+      border-radius: 8px;
+      border: 1px solid #d1d5db;
+      width: 100%;
+    }
+    .order-row {
+      margin-top: 14px;
+      display: flex;
+      justify-content: flex-end;
+      gap: 8px;
+    }
+
+    /* ---------- objednávkový modal ---------- */
+    .order-modal-content {
+      max-width: 480px;
+      padding: 20px 18px 24px;
+    }
+    .form-field {
+      display: flex;
+      flex-direction: column;
+      margin-bottom: 12px;
+      font-size: 13px;
+    }
+    .form-field label {
+      margin-bottom: 4px;
+      font-weight: 600;
+    }
+    .form-field input, .form-field textarea {
+      font-size: 14px;
+      padding: 8px 10px;
+      border: 1px solid #d1d5db;
+      border-radius: 8px;
+      outline: none;
+    }
+    .form-field input:focus, .form-field textarea:focus {
+      border-color: #3b82f6;
+    }
+    .submit-btn {
+      width: 100%;
+      background: #10b981;
+      color: #ffffff;
+      padding: 8px 0;
+      border: none;
+      border-radius: 10px;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.18s ease;
+    }
+    .submit-btn:hover { background: #059669; }
+    .thankyou-text {
+      text-align: center;
+      font-size: 15px;
+      font-weight: 600;
+      color: #065f46;
+      margin-top: 14px;
+    }
+
+    /* ---------- recenze v patičce ---------- */
+    .footer {
+      margin-top: 40px;
+      padding: 18px 16px;
+      background: #ffffff;
+      border-top: 1px solid #e5e7eb;
+      font-size: 13px;
+      color: #6b7280;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .review-grid {
+      margin-top: 18px;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 12px;
+    }
+    .review-card {
+      background: #ffffff;
+      border: 1px solid #e5e7eb;
+      border-radius: 12px;
+      padding: 10px;
+    }
+    .review-author {
+      font-weight: 600;
+      margin-bottom: 4px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+    .review-stars { color: #fbbf24; }
+    .review-text { font-size: 13px; color: #374151; }
+    .review-footer { font-size: 12px; color: #6b7280; margin-top: 6px; }
+  </style>
+</head>
+<body>
+
+  <!-- ---------- top menu ---------- -->
+  <header class="top-bar">
+    <div class="top-bar-inner">
+      <div class="logo">Elektronika CZ</div>
+      <nav class="menu">
+        <a href="#">Mobilní telefony</a>
+        <a href="#">Laptopy</a>
+        <a href="#">Tablety</a>
+        <a href="#">Televizory</a>
+        <a href="#">Reproduktory</a>
+        <a href="#">Příslušenství</a>
+      </nav>
+      <div class="cart">
+        <svg xmlns="http://www.w3.org/2000/svg" fill="none"
+             viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round"
+                stroke-width="2"
+                d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13l-1.6 8h13.2L17 13M7 13h10M9 21a1 1 0 100-2 1 1 0 000 2zm8 0a1 1 0 100-2 1 1 0 000 2z"/>
+        </svg>
+        Košík: <span id="cart-count">0</span> ks
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+
+    <!-- ---------- titulek ---------- -->
+    <section>
+      <h1 class="section-title">Mobilní telefony – nové</h1>
+      <p class="section-subtitle">
+        Klikni na kartu pro detaily, varianta se vybírá ve formuláři u produktu.
+      </p>
+    </section>
+
+    <!-- ---------- produktová síť ---------- -->
+    <section>
+      <div class="product-grid" id="product-list"></div>
+    </section>
+
+    <!-- ---------- televizory – vánoční akce ---------- -->
+    <section style="margin-top: 36px;">
+      <h2 class="section-title">Televizory – vánoční akce</h2>
+      <p class="section-subtitle">Výrazné slevy, jen do vyprodání zásob.</p>
+      <div class="product-grid" id="tv-list"></div>
+    </section>
+
+    <!-- ---------- recenze na spodku ---------- -->
+    <section>
+      <h2 class="section-title" style="margin-top: 36px;">Recenze na náš obchod</h2>
+      <div class="review-grid" id="store-reviews"></div>
+    </section>
+
+  </main>
+
+  <!-- ---------- modal detail produktu ---------- -->
+  <div id="product-modal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content">
+      <button class="modal-close" aria-label="Zavřít">&times;</button>
+      <h2 id="modal-title" class="modal-title">Název produktu</h2>
+      <p id="modal-price" class="modal-price">Cena</p>
+
+      <div id="modal-variants-container" style="margin-top: 8px;">
+        <label for="variant-select" class="modal-section-title">Varianta</label>
+        <select id="variant-select" class="variant-select"></select>
+      </div>
+
+      <h3 class="modal-section-title">Parametry</h3>
+      <ul id="modal-specs" class="spec-list"></ul>
+
+      <h3 class="modal-section-title">Recenze zákazníků</h3>
+      <div id="modal-reviews" class="reviews-container"></div>
+
+      <div class="order-row">
+        <button id="btn-open-order" class="btn-order">Objednat</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ---------- objednávkový modal ---------- -->
+  <div id="order-modal" class="modal hidden">
+    <div class="modal-backdrop"></div>
+    <div class="modal-content order-modal-content">
+      <button class="modal-close" aria-label="Zavřít">&times;</button>
+      <h2 class="modal-title">Objednávka</h2>
+
+      <form id="order-form">
+        <div class="form-field">
+          <label for="input-name">Jméno</label>
+          <input type="text" id="input-name" required>
+        </div>
+        <div class="form-field">
+          <label for="input-surname">Příjmení</label>
+          <input type="text" id="input-surname" required>
+        </div>
+        <div class="form-field">
+          <label for="input-address">Adresa</label>
+          <input type="text" id="input-address" required>
+        </div>
+        <div class="form-field">
+          <label for="input-phone">Telefon</label>
+          <input type="tel" id="input-phone" required>
+        </div>
+        <input type="hidden" id="input-product">
+        <input type="hidden" id="input-variant">
+        <button type="submit" class="submit-btn">Odeslat objednávku</button>
+      </form>
+
+      <p id="thankyou" class="thankyou-text hidden">
+        Děkujeme za objednávku. Brzy vás kontaktujeme.
+      </p>
+    </div>
+  </div>
+
+  <!-- ---------- recenze v patičce ---------- -->
+  <footer class="footer">
+    <span>© 2025 Elektronika CZ</span>
+    <span>Nejedná se o oficiální Apple web – jen ukázkový web.</span>
+  </footer>
+
+  <!-- ---------- skript ---------- -->
+  <script>
+    /* ---------- data produktů ---------- */
+    const products = [
+      /* --------- iPhone řada 14–17 Pro ---------- */
+      {
+        id: "iphone14",
+        name: "Apple iPhone 14",
+        oldPrice: "22 990 Kč",
+        newPrice: "19 990 Kč", // příklad sleva
+        label: "Sleva",
+        image: "https://via.placeholder.com/600x400?text=iPhone+14",
+        variants: ["128 GB", "256 GB"],
+        specs: [
+          "Displej 6,1\" OLED",
+          "12 + 12 Mpx fotoaparát",
+          "5G, eSIM",
+          "Barva: Midnight"
+        ],
+        reviews: [
+          { author: "Karel", stars: 5, text: "Skvělý telefon za rozumnou cenu." }
+        ]
+      },
+      {
+        id: "iphone15",
+        name: "Apple iPhone 15",
+        oldPrice: "25 990 Kč",
+        newPrice: "23 490 Kč",
+        label: "Sleva",
+        image: "https://via.placeholder.com/600x400?text=iPhone+15",
+        variants: ["128 GB", "256 GB"],
+        specs: [
+          "Displej 6,1\" Super Retina XDR",
+          "USB-C",
+          "A16 Bionic",
+          "Barva: Blue"
+        ],
+        reviews: [
+          { author: "Lukáš", stars: 5, text: "Rychlé doručení, super komunikace." }
+        ]
+      },
+      {
+        id: "iphone16",
+        name: "Apple iPhone 16",
+        oldPrice: "29 990 Kč",
+        newPrice: "27 490 Kč",
+        label: "TOP nabídka",
+        image: "https://via.placeholder.com/600x400?text=iPhone+16",
+        variants: ["128 GB", "256 GB", "512 GB"],
+        specs: [
+          "Displej 6,3\" Super Retina XDR",
+          "ProMotion",
+          "A18 Bionic",
+          "Odolnější sklo"
+        ],
+        reviews: [
+          { author: "Eva", stars: 5, text: "Telefon top, objednávka bez problémů." }
+        ]
+      },
+      {
+        id: "iphone17",
+        name: "Apple iPhone 17",
+        oldPrice: "22 990 Kč",
+        newPrice: "21 490 Kč",
+        label: "Novinka",
+        image: "https://via.placeholder.com/600x400?text=iPhone+17",
+        variants: ["128 GB", "256 GB"],
+        specs: [
+          "Displej 6,3\" Super Retina XDR",
+          "ProMotion",
+          "Dynamic Island",
+          "Barva: Levandulová"
+        ],
+        reviews: [
+          { author: "Roman", stars: 5, text: "Super telefon, moderní design." }
+        ]
+      },
+      {
+        id: "iphone17pro",
+        name: "Apple iPhone 17 Pro",
+        oldPrice: "34 990 Kč",
+        newPrice: "32 990 Kč",
+        label: "Novinka",
+        image: "https://via.placeholder.com/600x400?text=iPhone+17+Pro",
+        variants: ["256 GB", "512 GB", "1 TB"],
+        specs: [
+          "Super Retina XDR",
+          "A19 Pro",
+          "48 Mpx fotosoustava",
+          "USB-C"
+        ],
+        reviews: [
+          { author: "Jana", stars: 5, text: "Fotky v noci opravdu pecka." }
+        ]
+      },
+
+      /* --------- další nejprodávanější mobily ---------- */
+      {
+        id: "samsung_s24",
+        name: "Samsung Galaxy S24",
+        oldPrice: "24 990 Kč",
+        newPrice: "21 990 Kč",
+        label: "Sleva",
+        image: "https://via.placeholder.com/600x400?text=Samsung+S24",
+        variants: ["128 GB", "256 GB"],
+        specs: [
+          "Displej 6,2\" AMOLED, 120 Hz",
+          "Trojitý fotoaparát",
+          "Snapdragon / Exynos",
+          "Barva: Černá"
+        ],
+        reviews: [
+          { author: "Patrik", stars: 5, text: "Hladký chod, hry jedou jak nic." }
+        ]
+      },
+      {
+        id: "samsung_s23",
+        name: "Samsung Galaxy S23",
+        oldPrice: "21 490 Kč",
+        newPrice: "17 990 Kč",
+        label: "Výhodná volba",
+        image: "https://via.placeholder.com/600x400?text=Samsung+S23",
+        variants: ["128 GB", "256 GB"],
+        specs: [
+          "Displej 6,1\" AMOLED, 120 Hz",
+          "Trojitý fotoaparát",
+          "8K video",
+          "Barva: Phantom Black"
+        ],
+        reviews: [
+          { author: "Jana", stars: 5, text: "Foťák fakt pecka." }
+        ]
+      },
+      {
+        id: "xiaomi_redmi",
+        name: "Xiaomi Redmi Note 13 Pro",
+        oldPrice: "8 990 Kč",
+        newPrice: "7 490 Kč",
+        label: "Nejlepší poměr",
+        image: "https://via.placeholder.com/600x400?text=Redmi+Note+13+Pro",
+        variants: ["128 GB", "256 GB"],
+        specs: [
+          "Displej 6,67\" 120 Hz",
+          "Hlavní 200 Mpx",
+          "Rychlé nabíjení 67 W",
+          "Dual SIM"
+        ],
+        reviews: [
+          { author: "David", stars: 5, text: "Za málo peněz hodně muziky." }
+        ]
+      }
+    ];
+
+    /* ---------- data TV pro vánoční akci ---------- */
+    const tvs = [
+      {
+        id: "tv_samsung_qled",
+        name: "Samsung QLED 55\"",
+        oldPrice: "29 990 Kč",
+        newPrice: "19 990 Kč",
+        label: "–33%",
+        image: "https://via.placeholder.com/600x400?text=Samsung+QLED+55"
+      },
+      {
+        id: "tv_lg_oled",
+        name: "LG OLED 48\"",
+        oldPrice: "39 990 Kč",
+        newPrice: "27 990 Kč",
+        label: "–30%",
+        image: "https://via.placeholder.com/600x400?text=LG+OLED+48"
+      }
+    ];
+
+    /* ---------- recenze na obchod ---------- */
+    const storeReviews = [
+      {
+        author: "Martin H.",
+        stars: 5,
+        text: "Telefon přišel hned druhý den, perfektně zabalený.",
+        footer: "Ověřený nákup · iPhone 14"
+      },
+      {
+        author: "Veronika P.",
+        stars: 5,
+        text: "Pomohli mi vybrat mobil podle fotek a výdrže baterky.",
+        footer: "Ověřený nákup · Samsung S23"
+      },
+      {
+        author: "Tomáš R.",
+        stars: 4,
+        text: "Telefon jako nový, jen menší kosmetické škrábance.",
+        footer: "Ověřený nákup · Xiaomi Redmi"
+      }
+    ];
+
+    /* ---------- reference na DOM ---------- */
+    const productList = document.getElementById("product-list");
+    const tvList = document.getElementById("tv-list");
+    const storeReviewsList = document.getElementById("store-reviews");
+
+    const productModal = document.getElementById("product-modal");
+    const orderModal = document.getElementById("order-modal");
+    const modalTitle = document.getElementById("modal-title");
+    const modalPrice = document.getElementById("modal-price");
+    const modalSpecs = document.getElementById("modal-specs");
+    const modalReviews = document.getElementById("modal-reviews");
+    const variantSelect = document.getElementById("variant-select");
+    const btnOpenOrder = document.getElementById("btn-open-order");
+
+    const orderForm = document.getElementById("order-form");
+    const thankyou = document.getElementById("thankyou");
+
+    const inputProduct = document.getElementById("input-product");
+    const inputVariant = document.getElementById("input-variant");
+
+    /* ---------- vytváření produktových karet ---------- */
+    function renderProducts() {
+      products.forEach(prod => {
+        const card = document.createElement("article");
+        card.className = "product-card";
+        card.innerHTML = `
+          <div class="product-image-wrapper">
+            <img src="${prod.image}" alt="${prod.name}" class="product-image">
+            ${prod.label ? `<span class="tag" style="position:absolute;top:8px;left:8px;">${prod.label}</span>` : ""}
+          </div>
+          <div class="product-content">
+            <div class="product-name">${prod.name}</div>
+            <div class="price-row">
+              ${prod.oldPrice ? `<span class="old-price">${prod.oldPrice}</span>` : ""}
+              <span class="new-price">${prod.newPrice}</span>
+            </div>
+            <div style="margin-top:auto;display:flex;gap:6px;flex-wrap:wrap;">
+              <button class="btn-details">Detaily</button>
+              <button class="btn-order">Objednat</button>
+            </div>
+          </div>
+        `;
+        card.querySelector(".btn-details").addEventListener("click", () => openProductModal(prod));
+        card.querySelector(".btn-order").addEventListener("click", () => {
+          openProductModal(prod);
+          // otevře objednávku přes tlačítko v detailu
+        });
+        productList.appendChild(card);
+      });
+    }
+
+    function renderTVs() {
+      tvs.forEach(tv => {
+        const card = document.createElement("article");
+        card.className = "product-card";
+        card.innerHTML = `
+          <div class="product-image-wrapper">
+            <img src="${tv.image}" alt="${tv.name}" class="product-image">
+            ${tv.label ? `<span class="tag" style="position:absolute;top:8px;left:8px;background:#ef4444;">${tv.label}</span>` : ""}
+          </div>
+          <div class="product-content">
+            <div class="product-name">${tv.name}</div>
+            <div class="price-row">
+              ${tv.oldPrice ? `<span class="old-price">${tv.oldPrice}</span>` : ""}
+              <span class="new-price">${tv.newPrice}</span>
+            </div>
+          </div>
+        `;
+        tvList.appendChild(card);
+      });
+    }
+
+    function renderStoreReviews() {
+      storeReviews.forEach(r => {
+        const card = document.createElement("article");
+        card.className = "review-card";
+        card.innerHTML = `
+          <div class="review-author">
+            <span>${r.author}</span>
+            <span class="review-stars">${"★".repeat(r.stars)}</span>
+          </div>
+          <p class="review-text">${r.text}</p>
+          <p class="review-footer">${r.footer}</p>
+        `;
+        storeReviewsList.appendChild(card);
+      });
+    }
+
+    /* ---------- otevření detailu produktu ---------- */
+    function openProductModal(prod) {
+      modalTitle.textContent = prod.name;
+      modalPrice.textContent = prod.newPrice;
+
+      // varianty
+      variantSelect.innerHTML = "";
+      if (prod.variants && prod.variants.length) {
+        prod.variants.forEach(v => {
+          const opt = document.createElement("option");
+          opt.value = v;
+          opt.textContent = v;
+          variantSelect.appendChild(opt);
+        });
+        document.getElementById("modal-variants-container").style.display = "block";
+      } else {
+        document.getElementById("modal-variants-container").style.display = "none";
+      }
+
+      // parametry
+      modalSpecs.innerHTML = "";
+      if (prod.specs) {
+        prod.specs.forEach(s => {
+          const li = document.createElement("li");
+          li.textContent = s;
+          modalSpecs.appendChild(li);
+        });
+      }
+
+      // recenze
+      modalReviews.innerHTML = "";
+      if (prod.reviews) {
+        prod.reviews.forEach(r => {
+          const div = document.createElement("div");
+          div.className = "review-item";
+          div.innerHTML = `
+            <div class="review-header">
+              <span class="review-author">${r.author}</span>
+              <span class="review-stars">${"★".repeat(r.stars)}</span>
+            </div>
+            <p>${r.text}</p>
+          `;
+          modalReviews.appendChild(div);
+        });
+      }
+
+      // připravit pro objednávku
+      btnOpenOrder.onclick = () => {
+        // předvyplnit skrytá pole
+        inputProduct.value = prod.name;
+        inputVariant.value = variantSelect.value || "";
+        openOrderModal();
+      };
+
+      productModal.classList.remove("hidden");
+    }
+
+    /* ---------- objednávka ---------- */
+    function openOrderModal() {
+      productModal.classList.add("hidden");
+      orderModal.classList.remove("hidden");
+    }
+    function closeModal() {
+      productModal.classList.add("hidden");
+      orderModal.classList.add("hidden");
+    }
+
+    /* ---------- odeslání objednávky ---------- */
+    orderForm.addEventListener("submit", function(e) {
+      e.preventDefault();
+      const data = {
+        name: document.getElementById("input-name").value.trim(),
+        surname: document.getElementById("input-surname").value.trim(),
+        address: document.getElementById("input-address").value.trim(),
+        phone: document.getElementById("input-phone").value.trim(),
+        product: inputProduct.value,
+        variant: inputVariant.value
+      };
+
+      // ---- ZDE NASTAV svůj endpoint pro Google Sheets / Apps Script ----
+      const GOOGLE_SHEET_ENDPOINT = "https://script.google.com/macros/s/TVUJ_SKRYPTY_URL/exec";
+
+      fetch(GOOGLE_SHEET_ENDPOINT, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data)
+      })
+      .then(res => {
+        if (res.ok) {
+          thankyou.classList.remove("hidden");
+          orderForm.classList.add("hidden");
+          // případně zvýšit počet v košíku
+          const cartCount = document.getElementById("cart-count");
+          cartCount.textContent = parseInt(cartCount.textContent) + 1;
+        } else {
+          alert("Chyba při odeslání objednávky. Zkus to prosím znovu.");
+        }
+      })
+      .catch(err => {
+        console.error(err);
+        alert("Chyba připojení. Zkus to prosím znovu.");
+      });
+    });
+
+    /* ---------- zavření modalu ---------- */
+    document.querySelectorAll(".modal-close").forEach(btn => {
+      btn.addEventListener("click", closeModal);
+    });
+    document.querySelectorAll(".modal-backdrop").forEach(b => {
+      b.addEventListener("click", closeModal);
+    });
+    document.addEventListener("keydown", (e) => {
+      if (e.key === "Escape") closeModal();
+    });
+
+    /* ---------- start ---------- */
+    renderProducts();
+    renderTVs();
+    renderStoreReviews();
+  </script>
+</body>
+</html>
