@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Elektronika CZ</title>
+    <style>
+        body { margin:0; font-family: Arial; background:#f4f4f4; }
+        header { background:#0d1b2a; color:white; padding:20px; text-align:center; }
+        header span { color:#ffcc00; }
+        nav { display:flex; justify-content:center; gap:20px; flex-wrap:wrap; margin-top:10px; }
+        nav a { color:white; text-decoration:none; font-weight:bold; }
+        .cart-top { margin-top:10px; }
+
+        .section-note { text-align:center; margin-top:10px; }
+
+        .products { width:90%; max-width:900px; margin:20px auto; }
+
+        .product {
+            background:white;
+            border-radius:12px;
+            padding:15px;
+            margin-bottom:20px;
+            box-shadow:0 0 10px rgba(0,0,0,0.1);
+        }
+
+        .product img {
+            width:100%;
+            max-height:320px;
+            object-fit:contain;
+            background:#eaeaea;
+            border-radius:12px;
+        }
+
+        .badge-sale {
+            background:#ff2d55;
+            color:white;
+            padding:6px 12px;
+            border-radius:6px;
+            font-size:14px;
+            display:inline-block;
+            margin-bottom:10px;
+        }
+
+        .price-row {
+            margin-top:10px;
+            font-size:18px;
+        }
+
+        .old-price {
+            text-decoration:line-through;
+            color:#888;
+            margin-right:10px;
+        }
+
+        .new-price {
+            color:#e60033;
+            font-weight:bold;
+        }
+
+        .variant-row { margin-top:10px; }
+        select { width:100%; padding:10px; border-radius:6px; }
+        button {
+            width:100%;
+            padding:15px;
+            background:#0d1b2a;
+            color:white;
+            border:none;
+            border-radius:8px;
+            margin-top:15px;
+            font-size:16px;
+        }
+    </style>
+</head>
+
+<body>
+
+<header>
+    <h1>Elektronika <span>CZ</span></h1>
+    <nav>
+        <a href="#mobily">Mobilní telefony</a>
+        <a href="#laptopy">Laptopy</a>
+        <a href="#tablety">Tablety</a>
+        <a href="#televizory">Televizory</a>
+        <a href="#audio">Reproduktory</a>
+        <a href="#prislusenstvi">Příslušenství</a>
+        <a href="#recenze">Recenze</a>
+        <a href="#kosik">Košík</a>
+    </nav>
+    <div class="cart-top">🛒 Košík: <span id="cart-count">0</span> ks</div>
+</header>
+
+<h2 id="mobily" class="section-note">Mobilní telefony – nové</h2>
+<p class="section-note">Klikni na kartu pro detaily, varianta se vybírá dole.</p>
+
+<div class="products">
+
+    <!-- iPhone 17 -->
+    <div class="product" data-name="iPhone 17"
+         data-specs="Displej: 6,3” OLED 120 Hz | 48 MP fotoaparát | 128 GB úložiště">
+
+        <span class="badge-sale">TOP nabídka</span>
+
+        <!-- TVŮJ OPRAVDOVÝ OBRÁZEK -->
+        <img src="img/iphone17.jpg" alt="iPhone 17">
+
+        <h3>iPhone 17</h3>
+
+        <div class="price-row">
+            <span class="old-price">od 29 990 Kč</span>
+            <span class="new-price">od 26 490 Kč</span>
+        </div>
+
+        <div class="info">
+            <strong>Nový kus.</strong><br>
+            Výkonný procesor, kvalitní fotoaparát, dlouhá podpora aktualizací.
+            <br><strong>Dostupnost:</strong> skladem, odeslání do 24 hodin.
+        </div>
+
+        <div class="variant-row">
+            <span class="variant-label">Varianta:</span>
+            <select class="variant">
+                <option>iPhone 17 · 128 GB</option>
+                <option>iPhone 17 · 256 GB</option>
+                <option>iPhone 17 · 512 GB</option>
+            </select>
+        </div>
+
+        <button>Přidat do košíku</button>
+    </div>
+
+</div>
+
+</body>
+</html>
