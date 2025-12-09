@@ -1,0 +1,741 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>BobbyTech – Mobily, notebooky a příslušenství</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: #f5f5f7;
+      color: #111;
+      line-height: 1.5;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      text-decoration: none;
+      color: inherit;
+    }
+
+    /* Header */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255, 255, 255, 0.92);
+      backdrop-filter: blur(18px);
+      border-bottom: 1px solid rgba(0, 0, 0, 0.06);
+    }
+
+    .nav {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 0.8rem 1.2rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-weight: 700;
+      font-size: 1.1rem;
+    }
+
+    .brand span.logo-dot {
+      width: 10px;
+      height: 10px;
+      border-radius: 999px;
+      background: #0077ff;
+    }
+
+    .nav-links {
+      display: flex;
+      gap: 1rem;
+      font-size: 0.95rem;
+    }
+
+    .nav-links a {
+      padding: 0.2rem 0.4rem;
+      border-radius: 999px;
+    }
+
+    .nav-links a:hover {
+      background: rgba(0, 0, 0, 0.05);
+    }
+
+    /* Hero */
+
+    .hero {
+      max-width: 1100px;
+      margin: 1.5rem auto 1rem;
+      padding: 1.5rem 1.2rem;
+      display: grid;
+      grid-template-columns: minmax(0, 2fr) minmax(0, 3fr);
+      gap: 1.5rem;
+      align-items: center;
+    }
+
+    .hero-text h1 {
+      font-size: clamp(2rem, 3vw, 2.6rem);
+      margin-bottom: 0.6rem;
+    }
+
+    .hero-text p {
+      font-size: 0.98rem;
+      color: #444;
+      margin-bottom: 1rem;
+    }
+
+    .hero-badges {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+    }
+
+    .badge {
+      padding: 0.25rem 0.6rem;
+      border-radius: 999px;
+      background: #111;
+      color: #fff;
+    }
+
+    .badge.badge-light {
+      background: #e5f1ff;
+      color: #004e9c;
+    }
+
+    .hero-cta {
+      margin-top: 1rem;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.6rem;
+      align-items: center;
+    }
+
+    .btn-primary {
+      padding: 0.55rem 1.2rem;
+      border-radius: 999px;
+      border: none;
+      background: #0077ff;
+      color: #fff;
+      font-weight: 600;
+      font-size: 0.95rem;
+      cursor: pointer;
+    }
+
+    .btn-primary:hover {
+      background: #005ed1;
+    }
+
+    .hero-note {
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .hero-card {
+      background: radial-gradient(circle at top left, #e8f1ff, #ffffff);
+      border-radius: 1.2rem;
+      padding: 1.2rem;
+      box-shadow: 0 18px 40px rgba(0, 0, 0, 0.08);
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .hero-card h2 {
+      font-size: 1.1rem;
+    }
+
+    .hero-specs {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 0.6rem;
+      font-size: 0.85rem;
+    }
+
+    .hero-specs div {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 0.8rem;
+      padding: 0.6rem 0.7rem;
+      border: 1px solid rgba(0, 0, 0, 0.04);
+    }
+
+    .hero-specs strong {
+      display: block;
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    /* Toolbar + filters */
+
+    .main {
+      max-width: 1100px;
+      margin: 0 auto 2.5rem;
+      padding: 0 1.2rem;
+    }
+
+    .toolbar {
+      margin-top: 0.5rem;
+      margin-bottom: 1.2rem;
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 0.8rem;
+    }
+
+    .toolbar-title {
+      font-size: 1.1rem;
+      font-weight: 600;
+    }
+
+    .filters {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.9rem;
+    }
+
+    .filters label {
+      color: #555;
+    }
+
+    .filters select {
+      padding: 0.35rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid #d0d0d0;
+      background: #fff;
+      font-size: 0.9rem;
+    }
+
+    /* Products grid */
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem;
+    }
+
+    .product-card {
+      background: #fff;
+      border-radius: 1rem;
+      padding: 0.9rem;
+      box-shadow: 0 10px 24px rgba(0, 0, 0, 0.06);
+      display: flex;
+      flex-direction: column;
+      gap: 0.55rem;
+      transition: transform 0.12s ease, box-shadow 0.12s ease;
+    }
+
+    .product-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 14px 32px rgba(0, 0, 0, 0.09);
+    }
+
+    .product-image-wrapper {
+      border-radius: 0.9rem;
+      overflow: hidden;
+      background: #f2f2f5;
+      aspect-ratio: 4 / 3;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .product-title {
+      font-size: 0.98rem;
+      font-weight: 600;
+      margin-top: 0.1rem;
+    }
+
+    .product-meta {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.8rem;
+      color: #666;
+    }
+
+    .product-category {
+      padding: 0.15rem 0.55rem;
+      border-radius: 999px;
+      background: #f1f1f5;
+      font-size: 0.75rem;
+    }
+
+    .product-price {
+      font-weight: 700;
+      margin-top: 0.15rem;
+    }
+
+    .product-bottom {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 0.2rem;
+      gap: 0.4rem;
+    }
+
+    .product-tagline {
+      font-size: 0.78rem;
+      color: #777;
+    }
+
+    .btn-mini {
+      border: none;
+      border-radius: 999px;
+      padding: 0.35rem 0.9rem;
+      background: #111;
+      color: #fff;
+      font-size: 0.8rem;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .btn-mini:hover {
+      background: #333;
+    }
+
+    /* Footer */
+
+    footer {
+      border-top: 1px solid rgba(0, 0, 0, 0.05);
+      padding: 1rem 1.2rem 1.5rem;
+      font-size: 0.8rem;
+      color: #777;
+      text-align: center;
+    }
+
+    /* Responsive */
+
+    @media (max-width: 768px) {
+      .hero {
+        grid-template-columns: minmax(0, 1fr);
+      }
+
+      .hero-card {
+        order: -1;
+      }
+
+      .nav-links {
+        display: none;
+      }
+
+      .hero {
+        padding-top: 1rem;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- NAV -->
+  <header>
+    <nav class="nav">
+      <div class="brand">
+        <span class="logo-dot"></span>
+        <span>BobbyTech Store</span>
+      </div>
+      <div class="nav-links">
+        <a href="#products">Produkty</a>
+        <a href="#kontakt">Kontakt</a>
+      </div>
+    </nav>
+  </header>
+
+  <!-- HERO -->
+  <section class="hero">
+    <div class="hero-text">
+      <h1>Telefony, notebooky a příslušenství, které fakt chceš.</h1>
+      <p>
+        Pečlivě vybrané iPhony, Samsungy, výkonné notebooky a praktické doplňky.
+        Reálné ceny, jasné parametry a věci, které dávají smysl.
+      </p>
+      <div class="hero-badges">
+        <span class="badge">iPhone 16 Pro Max • S24 Ultra • MacBook</span>
+        <span class="badge badge-light">Kvalitní výběr, žádný bazarový chaos</span>
+      </div>
+      <div class="hero-cta">
+        <button class="btn-primary" onclick="document.getElementById('products').scrollIntoView({ behavior: 'smooth' })">
+          Prohlédnout nabídku
+        </button>
+        <span class="hero-note">Řazení podle ceny najdeš přímo nad produkty ↓</span>
+      </div>
+    </div>
+
+    <aside class="hero-card">
+      <h2>Top set pro náročné</h2>
+      <div class="hero-specs">
+        <div>
+          <strong>Telefon</strong>
+          iPhone 16 Pro Max / Samsung S24 Ultra
+        </div>
+        <div>
+          <strong>Notebook</strong>
+          MacBook Pro 14" M3 / XPS 13
+        </div>
+        <div>
+          <strong>Sluchátka</strong>
+          AirPods Pro 2 / Galaxy Buds3 Pro
+        </div>
+        <div>
+          <strong>Příslušenství</strong>
+          65W USB-C nabíječka, powerbanka, sklo, kryt
+        </div>
+      </div>
+    </aside>
+  </section>
+
+  <!-- MAIN -->
+  <main class="main">
+    <!-- Toolbar & sorting -->
+    <div class="toolbar">
+      <div class="toolbar-title">Nabídka produktů</div>
+      <div class="filters">
+        <label for="sortSelect">Seřadit podle:</label>
+        <select id="sortSelect">
+          <option value="default">Výchozí pořadí</option>
+          <option value="price-asc">Cena: od nejnižší</option>
+          <option value="price-desc">Cena: od nejvyšší</option>
+        </select>
+      </div>
+    </div>
+
+    <!-- PRODUCTS -->
+    <section class="products-grid" id="products">
+      <!-- TELEFONY -->
+      <article class="product-card" data-price="38990">
+        <div class="product-image-wrapper">
+          <img src="images/iphone16-pro-max.jpg" alt="iPhone 16 Pro Max">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Telefon</span>
+          <span>Novinka 2025</span>
+        </div>
+        <h3 class="product-title">iPhone 16 Pro Max 256 GB</h3>
+        <p class="product-price">38 990 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Titan, top foťák, výkon na všechno.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <article class="product-card" data-price="27990">
+        <div class="product-image-wrapper">
+          <img src="images/iphone15-pro.jpg" alt="iPhone 15 Pro">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Telefon</span>
+          <span>Oblíbený model</span>
+        </div>
+        <h3 class="product-title">iPhone 15 Pro 128 GB</h3>
+        <p class="product-price">27 990 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Lehký, rychlý, USB-C konečně.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <article class="product-card" data-price="18990">
+        <div class="product-image-wrapper">
+          <img src="images/iphone14.jpg" alt="iPhone 14">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Telefon</span>
+          <span>Skvělý poměr cena/výkon</span>
+        </div>
+        <h3 class="product-title">iPhone 14 128 GB</h3>
+        <p class="product-price">18 990 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Spolehlivý iPhone bez zbytečností.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <article class="product-card" data-price="32990">
+        <div class="product-image-wrapper">
+          <img src="images/samsung-s24-ultra.jpg" alt="Samsung Galaxy S24 Ultra">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Telefon</span>
+          <span>S Pen</span>
+        </div>
+        <h3 class="product-title">Samsung Galaxy S24 Ultra 256 GB</h3>
+        <p class="product-price">32 990 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Velký displej, AI funkce, fotky jak z profi foťáku.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <article class="product-card" data-price="21990">
+        <div class="product-image-wrapper">
+          <img src="images/samsung-s23.jpg" alt="Samsung Galaxy S23">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Telefon</span>
+          <span>Kompaktní</span>
+        </div>
+        <h3 class="product-title">Samsung Galaxy S23 256 GB</h3>
+        <p class="product-price">21 990 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Výkon i foťák v menším těle.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <article class="product-card" data-price="24990">
+        <div class="product-image-wrapper">
+          <img src="images/xiaomi-14-pro.jpg" alt="Xiaomi 14 Pro">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Telefon</span>
+          <span>Rychlé nabíjení</span>
+        </div>
+        <h3 class="product-title">Xiaomi 14 Pro 512 GB</h3>
+        <p class="product-price">24 990 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Výkon za super cenu, rychlé nabíjení.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <!-- NOTEBOOKY -->
+      <article class="product-card" data-price="28990">
+        <div class="product-image-wrapper">
+          <img src="images/macbook-air-m2.jpg" alt="MacBook Air 13 M2">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Notebook</span>
+          <span>Lehký</span>
+        </div>
+        <h3 class="product-title">MacBook Air 13" M2 256 GB</h3>
+        <p class="product-price">28 990 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Tichý, lehký, výdrž baterky celý den.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <article class="product-card" data-price="49990">
+        <div class="product-image-wrapper">
+          <img src="images/macbook-pro-14-m3.jpg" alt="MacBook Pro 14 M3">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Notebook</span>
+          <span>Profi výkon</span>
+        </div>
+        <h3 class="product-title">MacBook Pro 14" M3 512 GB</h3>
+        <p class="product-price">49 990 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Na střih videa, grafiku a práci bez kompromisů.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <article class="product-card" data-price="34990">
+        <div class="product-image-wrapper">
+          <img src="images/dell-xps-13.jpg" alt="Dell XPS 13">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Notebook</span>
+          <span>Ultrabook</span>
+        </div>
+        <h3 class="product-title">Dell XPS 13 512 GB</h3>
+        <p class="product-price">34 990 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Kompaktní, prémiový Windows notebook.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <article class="product-card" data-price="37990">
+        <div class="product-image-wrapper">
+          <img src="images/thinkpad-x1-carbon.jpg" alt="Lenovo ThinkPad X1 Carbon">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Notebook</span>
+          <span>Business</span>
+        </div>
+        <h3 class="product-title">Lenovo ThinkPad X1 Carbon</h3>
+        <p class="product-price">37 990 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Spolehlivý pracant s výbornou klávesnicí.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <article class="product-card" data-price="42990">
+        <div class="product-image-wrapper">
+          <img src="images/asus-rog-g15.jpg" alt="Asus ROG Strix G15">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Notebook</span>
+          <span>Gaming</span>
+        </div>
+        <h3 class="product-title">Asus ROG Strix G15</h3>
+        <p class="product-price">42 990 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Herní mašina s dedikovanou grafikou.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <!-- PŘÍSLUŠENSTVÍ -->
+      <article class="product-card" data-price="6490">
+        <div class="product-image-wrapper">
+          <img src="images/airpods-pro-2.jpg" alt="Apple AirPods Pro 2">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Příslušenství</span>
+          <span>Noise cancelling</span>
+        </div>
+        <h3 class="product-title">Apple AirPods Pro 2</h3>
+        <p class="product-price">6 490 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Skvělé do MHD, na cesty i do fitka.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <article class="product-card" data-price="5990">
+        <div class="product-image-wrapper">
+          <img src="images/galaxy-buds3-pro.jpg" alt="Samsung Galaxy Buds3 Pro">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Příslušenství</span>
+          <span>Pro Samsung</span>
+        </div>
+        <h3 class="product-title">Samsung Galaxy Buds3 Pro</h3>
+        <p class="product-price">5 990 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Perfektní ke Galaxy telefonům, ANC, pohodlné.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <article class="product-card" data-price="990">
+        <div class="product-image-wrapper">
+          <img src="images/usb-c-65w-charger.jpg" alt="65W USB-C nabíječka">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Příslušenství</span>
+          <span>Nabíjení</span>
+        </div>
+        <h3 class="product-title">65W USB-C nabíječka</h3>
+        <p class="product-price">990 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Notebook, mobil, tablet – jedna nabíječka na všechno.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <article class="product-card" data-price="2490">
+        <div class="product-image-wrapper">
+          <img src="images/magsafe-powerbank.jpg" alt="MagSafe powerbanka">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Příslušenství</span>
+          <span>Na cesty</span>
+        </div>
+        <h3 class="product-title">MagSafe powerbanka 10 000 mAh</h3>
+        <p class="product-price">2 490 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Drží na zádech iPhonu, žádné kabely.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <article class="product-card" data-price="399">
+        <div class="product-image-wrapper">
+          <img src="images/screen-protector.jpg" alt="Ochranné sklo na displej">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Příslušenství</span>
+          <span>Ochrana</span>
+        </div>
+        <h3 class="product-title">Ochranné sklo na displej</h3>
+        <p class="product-price">399 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Na první pád bez infarktu.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+
+      <article class="product-card" data-price="599">
+        <div class="product-image-wrapper">
+          <img src="images/silicone-case.jpg" alt="Silikonový kryt na telefon">
+        </div>
+        <div class="product-meta">
+          <span class="product-category">Příslušenství</span>
+          <span>Design</span>
+        </div>
+        <h3 class="product-title">Silikonový kryt na telefon</h3>
+        <p class="product-price">599 Kč</p>
+        <div class="product-bottom">
+          <span class="product-tagline">Příjemný na dotek, chrání hrany i záda.</span>
+          <button class="btn-mini">Detail</button>
+        </div>
+      </article>
+    </section>
+  </main>
+
+  <!-- FOOTER -->
+  <footer id="kontakt">
+    BobbyTech Store • Demo stránka pro prezentaci produktů •
+    Fotky produktů nahraj do složky <strong>images</strong> v GitHub repozitáři.
+  </footer>
+
+  <!-- SORTING SCRIPT -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sortSelect = document.getElementById('sortSelect');
+      const productsContainer = document.getElementById('products');
+      const originalOrder = Array.from(productsContainer.querySelectorAll('.product-card'));
+
+      sortSelect.addEventListener('change', function () {
+        const value = sortSelect.value;
+        let cards = Array.from(productsContainer.querySelectorAll('.product-card'));
+
+        if (value === 'default') {
+          productsContainer.innerHTML = '';
+          originalOrder.forEach(card => productsContainer.appendChild(card));
+          return;
+        }
+
+        cards.sort((a, b) => {
+          const priceA = Number(a.dataset.price);
+          const priceB = Number(b.dataset.price);
+
+          if (value === 'price-asc') {
+            return priceA - priceB;
+          } else if (value === 'price-desc') {
+            return priceB - priceA;
+          }
+          return 0;
+        });
+
+        productsContainer.innerHTML = '';
+        cards.forEach(card => productsContainer.appendChild(card));
+      });
+    });
+  </script>
+</body>
+</html>
