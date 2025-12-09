@@ -1,0 +1,804 @@
+<!DOCTYPE html>
+<html lang="cs">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elektronika CZ – Mobily, laptopy a příslušenství</title>
+
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    :root {
+      --bg-dark: #050816;
+      --bg-light: #f4f4f7;
+      --card-bg: #ffffff;
+      --accent: #ffd000;
+      --blue: #1976ff;
+      --green: #04a862;
+      --red: #f44336;
+      --text-main: #111827;
+      --text-muted: #6b7280;
+      --radius-lg: 18px;
+      --shadow-soft: 0 12px 30px rgba(15, 23, 42, 0.15);
+    }
+
+    body {
+      font-family: system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      background: var(--bg-light);
+      color: var(--text-main);
+      line-height: 1.5;
+      min-height: 100vh;
+    }
+
+    img {
+      max-width: 100%;
+      display: block;
+    }
+
+    a {
+      color: inherit;
+      text-decoration: none;
+    }
+
+    /* SNĚŽENÍ */
+
+    .snow-container {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      overflow: hidden;
+      z-index: 0;
+    }
+
+    .snowflake {
+      position: absolute;
+      top: -10px;
+      font-size: 12px;
+      opacity: 0.75;
+      animation-name: fall;
+      animation-timing-function: linear;
+      animation-iteration-count: infinite;
+    }
+
+    @keyframes fall {
+      0% {
+        transform: translateY(-10px);
+      }
+      100% {
+        transform: translateY(110vh);
+      }
+    }
+
+    /* HLAVIČKA */
+
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 20;
+      background: rgba(5, 8, 22, 0.97);
+      backdrop-filter: blur(16px);
+      border-bottom: 1px solid rgba(148, 163, 184, 0.3);
+    }
+
+    .header-inner {
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0.8rem 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .top-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      color: #e5e7eb;
+    }
+
+    .brand {
+      display: flex;
+      flex-direction: column;
+      gap: 0.1rem;
+    }
+
+    .brand-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 0.02em;
+    }
+
+    .brand-title span:last-child {
+      color: var(--accent);
+    }
+
+    .brand-subtitle {
+      font-size: 0.75rem;
+      color: #9ca3af;
+    }
+
+    .cart {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      color: #e5e7eb;
+    }
+
+    .cart-icon {
+      width: 18px;
+      height: 18px;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 11px;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 0.8rem;
+      font-size: 0.9rem;
+    }
+
+    nav a {
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      color: #e5e7eb;
+      opacity: 0.9;
+    }
+
+    nav a:hover {
+      background: rgba(15, 23, 42, 0.8);
+    }
+
+    nav a.active {
+      background: #e5e7eb;
+      color: #020617;
+      font-weight: 600;
+    }
+
+    /* HLAVNÍ OBSAH */
+
+    main {
+      position: relative;
+      z-index: 1;
+    }
+
+    .section {
+      max-width: 1120px;
+      margin: 1.4rem auto 2rem;
+      padding: 0 1.2rem;
+    }
+
+    .section-header {
+      margin-bottom: 0.8rem;
+    }
+
+    .section-title {
+      font-size: 1.4rem;
+      font-weight: 700;
+      margin-bottom: 0.2rem;
+    }
+
+    .section-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+    }
+
+    .sort-row {
+      display: flex;
+      justify-content: flex-end;
+      margin-bottom: 0.8rem;
+    }
+
+    .sort-control {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.85rem;
+      background: #ffffff;
+      padding: 0.4rem 0.7rem;
+      border-radius: 999px;
+      border: 1px solid #e5e7eb;
+      box-shadow: 0 6px 15px rgba(148, 163, 184, 0.3);
+    }
+
+    .sort-control label {
+      color: var(--text-muted);
+    }
+
+    .sort-control select {
+      border: none;
+      outline: none;
+      background: transparent;
+      font-size: 0.85rem;
+    }
+
+    /* GRID PRODUKTŮ */
+
+    .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 1rem;
+    }
+
+    .product-card {
+      position: relative;
+      background: var(--card-bg);
+      border-radius: var(--radius-lg);
+      box-shadow: var(--shadow-soft);
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      padding: 0.9rem 0.9rem 1rem;
+    }
+
+    .badge-sale {
+      position: absolute;
+      top: 0.8rem;
+      left: 0.9rem;
+      background: var(--red);
+      color: #fff;
+      font-size: 0.75rem;
+      padding: 0.25rem 0.7rem;
+      border-radius: 999px;
+      font-weight: 600;
+    }
+
+    .product-image-wrapper {
+      border-radius: 14px;
+      background: #f3f4f6;
+      overflow: hidden;
+      margin-bottom: 0.6rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      aspect-ratio: 16 / 9;
+    }
+
+    .product-name {
+      font-weight: 600;
+      font-size: 1rem;
+      margin-bottom: 0.1rem;
+    }
+
+    .product-info {
+      font-size: 0.82rem;
+      color: var(--text-muted);
+      margin-bottom: 0.4rem;
+    }
+
+    .price-row {
+      display: flex;
+      align-items: baseline;
+      gap: 0.5rem;
+      margin-bottom: 0.6rem;
+    }
+
+    .price-old {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-decoration: line-through;
+    }
+
+    .price-new {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--red);
+    }
+
+    .button-row {
+      margin-top: auto;
+      display: flex;
+      gap: 0.5rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      flex: 1;
+      text-align: center;
+      border-radius: 999px;
+      padding: 0.45rem 0.6rem;
+      font-size: 0.85rem;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+      transition: transform 0.08s ease, box-shadow 0.08s ease;
+      white-space: nowrap;
+    }
+
+    .btn-blue {
+      background: var(--blue);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(25, 118, 255, 0.4);
+    }
+
+    .btn-green {
+      background: var(--green);
+      color: #fff;
+      box-shadow: 0 8px 18px rgba(4, 168, 98, 0.4);
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+    }
+
+    /* DALŠÍ SEKCE */
+
+    .category-note {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 0.7rem;
+    }
+
+    .category-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(230px, 1fr));
+      gap: 1rem;
+    }
+
+    .small-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 0.9rem;
+      box-shadow: var(--shadow-soft);
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .small-card-title {
+      font-weight: 600;
+      font-size: 0.95rem;
+    }
+
+    .small-card-text {
+      font-size: 0.83rem;
+      color: var(--text-muted);
+    }
+
+    /* RECENZE */
+
+    .reviews {
+      max-width: 1120px;
+      margin: 0 auto 2.5rem;
+      padding: 0 1.2rem 1.5rem;
+    }
+
+    .reviews-title {
+      font-size: 1.3rem;
+      font-weight: 700;
+      margin-bottom: 0.4rem;
+    }
+
+    .reviews-subtitle {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+
+    .reviews-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: 0.9rem;
+    }
+
+    .review-card {
+      background: #ffffff;
+      border-radius: var(--radius-lg);
+      padding: 0.9rem 1rem;
+      box-shadow: var(--shadow-soft);
+      font-size: 0.9rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .review-name {
+      font-weight: 600;
+      font-size: 0.85rem;
+    }
+
+    .review-meta {
+      font-size: 0.8rem;
+      color: var(--text-muted);
+    }
+
+    .stars {
+      color: #fbbf24;
+      font-size: 0.9rem;
+    }
+
+    /* PATIČKA */
+
+    footer {
+      border-top: 1px solid #e5e7eb;
+      padding: 1rem 1.2rem 1.6rem;
+      font-size: 0.8rem;
+      color: var(--text-muted);
+      text-align: center;
+      background: #f9fafb;
+    }
+
+    @media (max-width: 640px) {
+      .header-inner {
+        padding-bottom: 0.9rem;
+      }
+
+      .top-row {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .sort-row {
+        justify-content: flex-start;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- SNOW -->
+  <div class="snow-container" aria-hidden="true">
+    <!-- pár vloček, duplicity vůbec nevadí -->
+    <div class="snowflake" style="left:5%; animation-duration:10s; animation-delay:0s;">❄️</div>
+    <div class="snowflake" style="left:20%; animation-duration:12s; animation-delay:1s;">❄️</div>
+    <div class="snowflake" style="left:35%; animation-duration:9s; animation-delay:2s;">❄️</div>
+    <div class="snowflake" style="left:50%; animation-duration:11s; animation-delay:0.5s;">❄️</div>
+    <div class="snowflake" style="left:65%; animation-duration:13s; animation-delay:1.5s;">❄️</div>
+    <div class="snowflake" style="left:80%; animation-duration:10s; animation-delay:0.8s;">❄️</div>
+    <div class="snowflake" style="left:90%; animation-duration:14s; animation-delay:2.3s;">❄️</div>
+  </div>
+
+  <!-- HLAVIČKA -->
+  <header>
+    <div class="header-inner">
+      <div class="top-row">
+        <div class="brand">
+          <div class="brand-title">
+            Elektronika <span>CZ</span>
+          </div>
+          <div class="brand-subtitle">
+            Telefony, laptopy a příslušenství na jednom místě.
+          </div>
+        </div>
+        <div class="cart">
+          <div class="cart-icon">🛒</div>
+          <span>Košík: 0 ks</span>
+        </div>
+      </div>
+      <nav>
+        <a href="#telefony" class="active">Mobilní telefony</a>
+        <a href="#laptopy">Laptopy</a>
+        <a href="#tablety">Tablety</a>
+        <a href="#televizory">Televizory</a>
+        <a href="#reproduktory">Reproduktory</a>
+        <a href="#prislusenstvi">Příslušenství</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+    <!-- MOBILNÍ TELEFONY -->
+    <section class="section" id="telefony">
+      <div class="section-header">
+        <h2 class="section-title">Mobilní telefony – nové</h2>
+        <p class="section-subtitle">
+          Klikni na kartu pro detaily, varianta se vybírá ve formuláři u produktu.
+        </p>
+      </div>
+
+      <!-- ŘAZENÍ PODLE CENY -->
+      <div class="sort-row">
+        <div class="sort-control">
+          <label for="sortPhones">Seřadit podle:</label>
+          <select id="sortPhones">
+            <option value="default">Výchozí pořadí</option>
+            <option value="price-asc">Cena: od nejnižší</option>
+            <option value="price-desc">Cena: od nejvyšší</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="product-grid" id="phonesGrid">
+        <!-- Apple iPhone 14 -->
+        <article class="product-card" data-price="9490">
+          <span class="badge-sale">Sleva</span>
+          <div class="product-image-wrapper">
+            <img src="images/iphone14.jpg" alt="Apple iPhone 14">
+          </div>
+          <h3 class="product-name">Apple iPhone 14</h3>
+          <div class="product-info">
+            128 GB, velmi dobrý stav, záruka 12 měsíců.
+          </div>
+          <div class="price-row">
+            <span class="price-old">22 990 Kč</span>
+            <span class="price-new">9 490 Kč</span>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-blue">Detaily</button>
+            <button class="btn btn-green">Objednat</button>
+          </div>
+        </article>
+
+        <!-- Apple iPhone 15 -->
+        <article class="product-card" data-price="16990">
+          <span class="badge-sale">Sleva</span>
+          <div class="product-image-wrapper">
+            <img src="images/iphone15.jpg" alt="Apple iPhone 15">
+          </div>
+          <h3 class="product-name">Apple iPhone 15</h3>
+          <div class="product-info">
+            128 GB, USB-C, minimálně použitý kus.
+          </div>
+          <div class="price-row">
+            <span class="price-old">24 990 Kč</span>
+            <span class="price-new">16 990 Kč</span>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-blue">Detaily</button>
+            <button class="btn btn-green">Objednat</button>
+          </div>
+        </article>
+
+        <!-- iPhone 16 Pro Max -->
+        <article class="product-card" data-price="38990">
+          <span class="badge-sale">Sleva</span>
+          <div class="product-image-wrapper">
+            <img src="images/iphone16-pro-max.jpg" alt="Apple iPhone 16 Pro Max">
+          </div>
+          <h3 class="product-name">Apple iPhone 16 Pro Max</h3>
+          <div class="product-info">
+            256 GB, titan, top foťák, novinka roku.
+          </div>
+          <div class="price-row">
+            <span class="price-old">44 990 Kč</span>
+            <span class="price-new">38 990 Kč</span>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-blue">Detaily</button>
+            <button class="btn btn-green">Objednat</button>
+          </div>
+        </article>
+
+        <!-- Samsung S24 Ultra -->
+        <article class="product-card" data-price="27990">
+          <span class="badge-sale">Sleva</span>
+          <div class="product-image-wrapper">
+            <img src="images/samsung-s24-ultra.jpg" alt="Samsung Galaxy S24 Ultra">
+          </div>
+          <h3 class="product-name">Samsung Galaxy S24 Ultra</h3>
+          <div class="product-info">
+            256 GB, S Pen, perfektní na focení i práci.
+          </div>
+          <div class="price-row">
+            <span class="price-old">34 990 Kč</span>
+            <span class="price-new">27 990 Kč</span>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-blue">Detaily</button>
+            <button class="btn btn-green">Objednat</button>
+          </div>
+        </article>
+
+        <!-- Samsung S23 -->
+        <article class="product-card" data-price="17990">
+          <span class="badge-sale">Sleva</span>
+          <div class="product-image-wrapper">
+            <img src="images/samsung-s23.jpg" alt="Samsung Galaxy S23">
+          </div>
+          <h3 class="product-name">Samsung Galaxy S23</h3>
+          <div class="product-info">
+            256 GB, kompaktní rozměry, vysoký výkon.
+          </div>
+          <div class="price-row">
+            <span class="price-old">23 990 Kč</span>
+            <span class="price-new">17 990 Kč</span>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-blue">Detaily</button>
+            <button class="btn btn-green">Objednat</button>
+          </div>
+        </article>
+
+        <!-- Xiaomi -->
+        <article class="product-card" data-price="10990">
+          <span class="badge-sale">Sleva</span>
+          <div class="product-image-wrapper">
+            <img src="images/xiaomi-midrange.jpg" alt="Xiaomi 5G">
+          </div>
+          <h3 class="product-name">Xiaomi 5G střední třída</h3>
+          <div class="product-info">
+            256 GB, 5G, rychlé nabíjení, super poměr cena/výkon.
+          </div>
+          <div class="price-row">
+            <span class="price-old">15 990 Kč</span>
+            <span class="price-new">10 990 Kč</span>
+          </div>
+          <div class="button-row">
+            <button class="btn btn-blue">Detaily</button>
+            <button class="btn btn-green">Objednat</button>
+          </div>
+        </article>
+      </div>
+    </section>
+
+    <!-- LAPTOPY -->
+    <section class="section" id="laptopy">
+      <div class="section-header">
+        <h2 class="section-title">Laptopy</h2>
+        <p class="section-subtitle">Výkonné notebooky na práci, školu i hraní.</p>
+      </div>
+
+      <div class="category-grid">
+        <article class="small-card">
+          <h3 class="small-card-title">MacBook Air 13" M2</h3>
+          <p class="small-card-text">
+            Lehký notebook s výdrží baterie až 18 hodin. Ideální na práci i studium.
+          </p>
+        </article>
+        <article class="small-card">
+          <h3 class="small-card-title">Asus ROG Strix G15</h3>
+          <p class="small-card-text">
+            Herní notebook s výkonnou grafikou a 144Hz displejem.
+          </p>
+        </article>
+      </div>
+    </section>
+
+    <!-- TABLETY -->
+    <section class="section" id="tablety">
+      <div class="section-header">
+        <h2 class="section-title">Tablety</h2>
+        <p class="section-subtitle">Na filmy, hry i práci na cestách.</p>
+      </div>
+      <div class="category-grid">
+        <article class="small-card">
+          <h3 class="small-card-title">iPad 10. generace</h3>
+          <p class="small-card-text">Skvělý tablet pro zábavu i školu.</p>
+        </article>
+        <article class="small-card">
+          <h3 class="small-card-title">Samsung Galaxy Tab S9</h3>
+          <p class="small-card-text">AMOLED displej, S Pen v balení.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- TELEVIZORY -->
+    <section class="section" id="televizory">
+      <div class="section-header">
+        <h2 class="section-title">Televizory</h2>
+        <p class="section-subtitle">4K obraz, chytré funkce, tenké rámečky.</p>
+      </div>
+      <div class="category-grid">
+        <article class="small-card">
+          <h3 class="small-card-title">LG OLED 55"</h3>
+          <p class="small-card-text">Perfektní černá a filmový zážitek doma.</p>
+        </article>
+        <article class="small-card">
+          <h3 class="small-card-title">Samsung QLED 50"</h3>
+          <p class="small-card-text">Jasný obraz, ideální na filmy i hry.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- REPRODUKTORY -->
+    <section class="section" id="reproduktory">
+      <div class="section-header">
+        <h2 class="section-title">Reproduktory</h2>
+        <p class="section-subtitle">Na párty, domů i do auta.</p>
+      </div>
+      <div class="category-grid">
+        <article class="small-card">
+          <h3 class="small-card-title">Bluetooth reproduktor</h3>
+          <p class="small-card-text">Voděodolný, výdrž 12 hodin.</p>
+        </article>
+        <article class="small-card">
+          <h3 class="small-card-title">Soundbar k TV</h3>
+          <p class="small-card-text">Lepší zvuk k vašemu televzoru.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- PŘÍSLUŠENSTVÍ -->
+    <section class="section" id="prislusenstvi">
+      <div class="section-header">
+        <h2 class="section-title">Příslušenství</h2>
+        <p class="section-subtitle">Sluchátka, nabíječky, kryty a další.</p>
+      </div>
+      <div class="category-grid">
+        <article class="small-card">
+          <h3 class="small-card-title">Apple AirPods Pro 2</h3>
+          <p class="small-card-text">Skvělé sluchátka s potlačením hluku.</p>
+        </article>
+        <article class="small-card">
+          <h3 class="small-card-title">65W USB-C nabíječka</h3>
+          <p class="small-card-text">Jedna nabíječka na notebook i telefon.</p>
+        </article>
+      </div>
+    </section>
+
+    <!-- RECENZE -->
+    <section class="reviews" id="recenze">
+      <h2 class="reviews-title">Recenze zákazníků</h2>
+      <p class="reviews-subtitle">
+        Ohlasy lidí, kteří už přes Elektroniku CZ nakoupili.
+      </p>
+
+      <div class="reviews-grid">
+        <article class="review-card">
+          <div class="stars">★★★★★</div>
+          <p>
+            Rychlé jednání, iPhone dorazil ve stavu jako nový. Komunikace perfektní.
+          </p>
+          <div class="review-name">Martin K.</div>
+          <div class="review-meta">iPhone 14 • Ostrava</div>
+        </article>
+
+        <article class="review-card">
+          <div class="stars">★★★★★</div>
+          <p>
+            Objednal jsem Samsung S24 Ultra, vše dorazilo do druhého dne. Určitě doporučuju.
+          </p>
+          <div class="review-name">Petra S.</div>
+          <div class="review-meta">Samsung S24 Ultra • Brno</div>
+        </article>
+
+        <article class="review-card">
+          <div class="stars">★★★★☆</div>
+          <p>
+            MacBook Air ve super stavu, jen krabice byla lehce poškozená. Jinak top.
+          </p>
+          <div class="review-name">Lukáš V.</div>
+          <div class="review-meta">MacBook Air • Praha</div>
+        </article>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    Elektronika CZ • Demo stránka • Nahraj své fotky produktů do složky <strong>images</strong> v GitHub repozitáři.
+  </footer>
+
+  <!-- SCRIPT: ŘAZENÍ TELEFONŮ PODLE CENY -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function () {
+      const sortSelect = document.getElementById('sortPhones');
+      const grid = document.getElementById('phonesGrid');
+      const originalCards = Array.from(grid.querySelectorAll('.product-card'));
+
+      sortSelect.addEventListener('change', function () {
+        const value = sortSelect.value;
+        let cards = Array.from(grid.querySelectorAll('.product-card'));
+
+        if (value === 'default') {
+          grid.innerHTML = '';
+          originalCards.forEach(card => grid.appendChild(card));
+          return;
+        }
+
+        cards.sort((a, b) => {
+          const priceA = Number(a.dataset.price);
+          const priceB = Number(b.dataset.price);
+          if (value === 'price-asc') {
+            return priceA - priceB;
+          } else if (value === 'price-desc') {
+            return priceB - priceA;
+          }
+          return 0;
+        });
+
+        grid.innerHTML = '';
+        cards.forEach(card => grid.appendChild(card));
+      });
+    });
+  </script>
+</body>
+</html>
